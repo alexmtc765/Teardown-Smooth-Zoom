@@ -3,6 +3,8 @@ zoomedFov = 30
 fov = 0
 timeToZoom = 0.1
 debugEnabled = false
+
+
 function init()
     fov = defaultFov
     

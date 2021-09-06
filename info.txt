@@ -1,7 +1,7 @@
-name = Zoom With C Mod
+name = Teardown Zoom Mod
 author = alex_mtc
-description = zoom in with c
-tags=
+description = Zoom in with c
+tags=# Gameplay
 
 # If description contains [noupload] the description on Steam workshop will not be overwritten.
 # Available tags (comma-separated):
