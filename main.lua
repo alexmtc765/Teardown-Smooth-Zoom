@@ -1,15 +1,15 @@
-defaultFov = 90
-zoomedFov = 30
+local defaultFov = GetInt("savegame.mod.defaultFOV")
+local zoomedFov = GetInt("savegame.mod.zoomedFOV")
 fov = 0
-timeToZoom = 0.1
+local timeToZoom = GetFloat("savegame.mod.zoomSpeed")
 debugEnabled = false
 
 
 function init()
-    fov = defaultFov
-    
+    fov = defaultFov  
 end
 
+--check if c is pressed then zooms
 function tick(dt)
     if InputPressed("c") then
         zoomIn()
@@ -22,18 +22,8 @@ function tick(dt)
     draw()
 end
 
-
-function update(dt)
-end
-
-
-function draw(dt)
-    debug()
-end
-
 function zoomIn()
-    SetValue("fov", zoomedFov, "cosine", timeToZoom)
-    
+    SetValue("fov", zoomedFov, "cosine", timeToZoom)   
 end
 
 function zoomOut()
@@ -50,4 +40,8 @@ function debug()
     UiText("The Fov is: ", true)
     UiText(fov)
     end
+end
+
+function draw(dt)
+    debug()
 end
