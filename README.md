@@ -1,8 +1,24 @@
-# Zoom-Mod
- A zoom mod for the game Teardown
+# Zoom Mod For Teardown
+### Features
 
-What zooming looks like
+- Cuztomizable FOV **(up to 170)**
+- Cuztomizable Zoomed FOV **(can go as low as 0)**
+- Cuztomizable Zoom Speed
 
-what the options menu looks like
+### Zooming in
+![](images/Zoom.gif)
 
-(idk how to make a readme)
+Press **C** to zoom in
+
+### Options
+![](images/options.gif)
+
+- The **Default FOV** is the fov thats used when you are not zooming in
+- The **Zoomed FOV** is the one thats used when zooming in 
+- The **Zoom Speed** is the amount of time it takes to zoom in 
+- The **Save Button** saves your settings
+- The **Default Button** resets your settings to default
+
+
+
+
