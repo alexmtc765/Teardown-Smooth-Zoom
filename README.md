@@ -1,2 +1,2 @@
 # Zoom-Mod
- Optifine like zoom mode for teardown
+ A zoom mod for the game Teardown
