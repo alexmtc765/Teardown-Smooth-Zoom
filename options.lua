@@ -1,3 +1,4 @@
+debugEnabled = false
 function init()
     defaultFOV = GetInt("savegame.mod.defaultFOV")
     zoomedFOV = GetInt("savegame.mod.zoomedFOV")
@@ -5,17 +6,8 @@ function init()
 end
 
 function draw()
-    centerUI()
-    UiFont("bold.ttf", 48)
-    drawBottomButtons()
-    UiTranslate(0,-100)
-    UiTranslate(0,300)
-    drawSliders()
-    UiTranslate(0,-300)
-    UiTranslate(0,345)
-    drawZoomSpeed()
-    UiTranslate(0,-345)
-    drawText()
+    drawMenu()
+    debugUI()
 end
 
 --draws menu save and default button
@@ -97,7 +89,45 @@ function round(n)
     return math.floor(n + 0.5)
 end
 
+--draws debug ui
+function debugUI()
+    if InputDown("b") and InputDown("u") and InputDown("g") then
+        debugEnabled = true
+    end    
+    if debugEnabled == true then
+    UiTranslate(0, -100)
+    local dfov = GetInt("savegame.mod.defaultFOV")
+    UiText(dfov,true)
+    
+    UiTranslate(0, -100)
+    local zfov = GetInt("savegame.mod.zoomedFOV")
+    UiText(zfov,true)
+    
+    UiTranslate(0, -100)
+    local zSpeed = GetFloat("savegame.mod.zoomSpeed")
+    UiText(zSpeed,true)
+    if InputPressed("p") then
+        --very true
+        DebugPrint("This UI code is awful")
+    end
+    end
+end
+
 function roundDec(n)
     return math.floor(n * 100 + 0.5) / 100
+end
+
+function drawMenu()
+    centerUI()
+    UiFont("bold.ttf", 48)
+    drawBottomButtons()
+    UiTranslate(0,-100)
+    UiTranslate(0,300)
+    drawSliders()
+    UiTranslate(0,-300)
+    UiTranslate(0,345)
+    drawZoomSpeed()
+    UiTranslate(0,-345)
+    drawText() 
 end
     
