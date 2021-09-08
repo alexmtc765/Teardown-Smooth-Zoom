@@ -1,6 +1,6 @@
 name = Teardown Zoom Mod
 author = alex_mtc
-description = Zoom in with c
+description = Use C to zoom in. Make sure that you change the default FOV in the options menu to the fov that you use or the mod wont work (or you can just use default settings by pressing the default button in options)
 tags=# Gameplay
 
 # If description contains [noupload] the description on Steam workshop will not be overwritten.
