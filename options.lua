@@ -1,5 +1,8 @@
+--this code is terrible I need to fix it
 debugEnabled = false
 keybindMode = false
+bindText = "badcode"
+
 function init()
     defaultFOV = GetInt("savegame.mod.defaultFOV")
     zoomedFOV = GetInt("savegame.mod.zoomedFOV")
@@ -8,16 +11,22 @@ end
 
 function draw()
     drawMenu()
+    drawKeybindButton()
     debugUI()
-    if (keybindMode == true) then
-        ZoomKey = InputLastPressedKey()
-        SetString("savegame.mod.ZoomKey", ZoomKey)
-        if InputDown(ZoomKey) then
-            DebugPrint(ZoomKey)
-            keybindMode = false
-            end
-    end
-   
+end
+
+function drawMenu()
+    centerUI()
+    UiFont("bold.ttf", 48)
+    drawBottomButtons()
+    UiTranslate(0,-100)
+    UiTranslate(0,300)
+    drawSliders()
+    UiTranslate(0,-300)
+    UiTranslate(0,345)
+    drawZoomSpeed()
+    UiTranslate(0,-345)
+    drawText() 
 end
 
 --draws menu save and default button
@@ -35,6 +44,8 @@ function drawBottomButtons()
         SetInt("savegame.mod.defaultFOV", 90)
         SetInt("savegame.mod.zoomedFOV", 30)
         SetFloat("savegame.mod.zoomSpeed", 0.5)
+        SetString("savegame.mod.ZoomKey", "c")
+        SetBool("savegame.mod.keybindSet", true)
     end
 
     UiTranslate(-1600, 0)
@@ -43,11 +54,11 @@ function drawBottomButtons()
         SetInt("savegame.mod.zoomedFOV", zoomedFOV)
         SetFloat("savegame.mod.zoomSpeed", zoomSpeed)
     end
-    UiTranslate(800, -750)   
+    UiTranslate(800, -750) 
 end
 
 function drawSliders()
-    
+ 
     defaultFOV = UiSlider("ui/common/dot.png", "x", defaultFOV, 0, 170)
     defaultFOV = round(defaultFOV)
     UiTranslate(-100, 0)
@@ -80,7 +91,7 @@ function drawZoomSpeed()
     UiTranslate(0, -100) 
     UiTranslate(0, 150)
 end
-
+--draws text inbetween buttons
 function drawText()
     UiText("Default FOV")
     UiTranslate(0,100)
@@ -90,77 +101,78 @@ function drawText()
     UiTranslate(0,-200)
 end
 
+function drawKeybindButton()
+    UiTranslate(0,-50)
+    if UiTextButton(bindText) then 
+        keybindMode = true
+    end
+    changeBind()
+    UiTranslate(0,50)
+end
+
+function changeBind()
+    if (keybindMode == true) then
+        bindText = "Press a key"
+        ZoomKey = InputLastPressedKey()
+        SetString("savegame.mod.ZoomKey", ZoomKey)
+        if InputDown(ZoomKey) then
+            --DebugPrint(ZoomKey)
+            keybindMode = false
+            SetBool("savegame.mod.keybindSet", true)
+            end
+    else
+        bindText = "Change Keybind"
+    end
+end
+
 function centerUI()
     UiTranslate(UiCenter(), 250)
 	UiAlign("center middle")
+end
+
+function roundDec(n)
+    return math.floor(n * 100 + 0.5) / 100
 end
 
 function round(n)
     return math.floor(n + 0.5)
 end
 
+
+
 --draws debug ui
 function debugUI()
     if InputDown("b") and InputDown("u") and InputDown("g") then
         debugEnabled = true
-    end    
+    end 
     if debugEnabled == true then
     UiTranslate(0, -100)
     local dfov = GetInt("savegame.mod.defaultFOV")
     UiText(dfov,true)
-    
+ 
     UiTranslate(0, -100)
     local zfov = GetInt("savegame.mod.zoomedFOV")
     UiText(zfov,true)
-    
+ 
     UiTranslate(0, -100)
     local zSpeed = GetFloat("savegame.mod.zoomSpeed")
     UiText(zSpeed,true)
-
-    
-    
     UiTranslate(0, -100)
-    if UiTextButton("Key Bind Work") then   
-        keybindMode = true
-        end
-    end
     
+    if UiTextButton("Bye Bye Mod Settings") then
+    SetInt("savegame.mod.defaultFOV", 0)
+    SetInt("savegame.mod.zoomedFOV", 0)
+    SetFloat("savegame.mod.zoomSpeed", 0)
+    SetString("savegame.mod.ZoomKey", " ")
+    SetBool("savegame.mod.keybindSet", false)
     end
+end
 
     if InputPressed("p") then
         --very true
         DebugPrint("This UI code is awful")
     end
-
-
-function roundDec(n)
-    return math.floor(n * 100 + 0.5) / 100
 end
 
-function keybindTest()
-    if InputPressed("p") then
-        ZoomKey = InputLastPressedKey()
-        SetString("savegame.mod.ZoomKey", ZoomKey)
-        DebugPrint(ZoomKey)
-    end
-end
 
-function drawMenu()
-    centerUI()
-    UiFont("bold.ttf", 48)
-    keybindTest()
-    drawBottomButtons()
-    UiTranslate(0,-100)
-    UiTranslate(0,300)
-    drawSliders()
-    UiTranslate(0,-300)
-    UiTranslate(0,345)
-    drawZoomSpeed()
-    UiTranslate(0,-345)
-    drawText() 
-end
 
-function update()
-    
-end
-    
