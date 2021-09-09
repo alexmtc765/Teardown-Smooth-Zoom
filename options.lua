@@ -1,4 +1,5 @@
 debugEnabled = false
+keybindMode = false
 function init()
     defaultFOV = GetInt("savegame.mod.defaultFOV")
     zoomedFOV = GetInt("savegame.mod.zoomedFOV")
@@ -8,6 +9,15 @@ end
 function draw()
     drawMenu()
     debugUI()
+    if (keybindMode == true) then
+        ZoomKey = InputLastPressedKey()
+        SetString("savegame.mod.ZoomKey", ZoomKey)
+        if InputDown(ZoomKey) then
+            DebugPrint(ZoomKey)
+            keybindMode = false
+            end
+    end
+   
 end
 
 --draws menu save and default button
@@ -106,20 +116,22 @@ function debugUI()
     UiTranslate(0, -100)
     local zSpeed = GetFloat("savegame.mod.zoomSpeed")
     UiText(zSpeed,true)
+
+    
     
     UiTranslate(0, -100)
-    if UiTextButton("Key Bind No Work") then
-        ZoomKey = InputLastPressedKey()
-        SetString("savegame.mod.ZoomKey", ZoomKey)
-        DebugPrint(ZoomKey)
+    if UiTextButton("Key Bind Work") then   
+        keybindMode = true
+        end
+    end
+    
     end
 
     if InputPressed("p") then
         --very true
         DebugPrint("This UI code is awful")
     end
-    end
-end
+
 
 function roundDec(n)
     return math.floor(n * 100 + 0.5) / 100
@@ -146,5 +158,9 @@ function drawMenu()
     drawZoomSpeed()
     UiTranslate(0,-345)
     drawText() 
+end
+
+function update()
+    
 end
     
