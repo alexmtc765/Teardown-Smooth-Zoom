@@ -1,4 +1,4 @@
-
+--loads stuff
 local defaultFov = GetInt("savegame.mod.defaultFOV")
 local zoomedFov = GetInt("savegame.mod.zoomedFOV")
 fov = 0
