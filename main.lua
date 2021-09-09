@@ -3,6 +3,7 @@ local defaultFov = GetInt("savegame.mod.defaultFOV")
 local zoomedFov = GetInt("savegame.mod.zoomedFOV")
 fov = 0
 local timeToZoom = GetFloat("savegame.mod.zoomSpeed")
+local zoomKey = GetString("savegame.mod.ZoomKey")
 debugEnabled = false
 --the fov var is used for storing the camera FOV
 
@@ -12,11 +13,11 @@ end
 
 --checks if c is pressed then zooms
 function tick(dt)
-    if InputPressed("c") then
+    if InputPressed(zoomKey) then
         zoomIn()
     end
     
-    if InputReleased("c") then
+    if InputReleased(zoomKey) then
         zoomOut()
     end
     SetCameraFov(fov) 

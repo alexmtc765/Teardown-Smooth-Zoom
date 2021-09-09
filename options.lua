@@ -106,6 +106,14 @@ function debugUI()
     UiTranslate(0, -100)
     local zSpeed = GetFloat("savegame.mod.zoomSpeed")
     UiText(zSpeed,true)
+    
+    UiTranslate(0, -100)
+    if UiTextButton("Key Bind No Work") then
+        ZoomKey = InputLastPressedKey()
+        SetString("savegame.mod.ZoomKey", ZoomKey)
+        DebugPrint(ZoomKey)
+    end
+
     if InputPressed("p") then
         --very true
         DebugPrint("This UI code is awful")
@@ -117,9 +125,18 @@ function roundDec(n)
     return math.floor(n * 100 + 0.5) / 100
 end
 
+function keybindTest()
+    if InputPressed("p") then
+        ZoomKey = InputLastPressedKey()
+        SetString("savegame.mod.ZoomKey", ZoomKey)
+        DebugPrint(ZoomKey)
+    end
+end
+
 function drawMenu()
     centerUI()
     UiFont("bold.ttf", 48)
+    keybindTest()
     drawBottomButtons()
     UiTranslate(0,-100)
     UiTranslate(0,300)
