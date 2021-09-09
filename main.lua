@@ -10,8 +10,12 @@ debugEnabled = false
 
 function init()
     fov = defaultFov 
-    if defaultFov and zoomedFov and timeToZoom == 0 then
-        DebugPrint("Teardown Zoom Mod: Please go to the mod options and change the default fov to the one you use or the mod will not work")
+    if defaultFov == 0 then
+        if zoomedFov == 0 then
+           if timeToZoom == 0 then
+            DebugPrint("Teardown Zoom Mod: Please go to the mod options and change the default fov to the one you use or the mod will not work")
+           end 
+        end 
     end
     if (bindSet == false) then
         DebugPrint("Teardown Zoom Mod: Please go to the mod options and set a keybind or the mod will not work")
