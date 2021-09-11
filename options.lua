@@ -166,6 +166,7 @@ function debugUI()
     SetString("savegame.mod.ZoomKey", " ")
     SetBool("savegame.mod.keybindSet", false)
     end
+    debugMouse()
 end
 
     if InputPressed("p") then
@@ -174,5 +175,11 @@ end
     end
 end
 
+function debugMouse()
+    local x, y = UiGetMousePos()
+    UiTranslate(x, y)
+    UiFont("bold.ttf", 24)
+    UiText("Debug Mode")
+end
 
 
