@@ -5,8 +5,17 @@ bindText = "badcode"
 
 function init()
     defaultFOV = GetInt("savegame.mod.defaultFOV")
+    if defaultFOV == null or 0 then
+        SetInt("savegame.mod.defaultFOV", 90)
+    end
     zoomedFOV = GetInt("savegame.mod.zoomedFOV")
+    if zoomedFOV == null or 0 then
+        SetInt("savegame.mod.zoomedFOV", 30)
+    end
     zoomSpeed = GetFloat("savegame.mod.zoomSpeed")
+    if zoomSpeed == null or 0 then
+        SetFloat("savegame.mod.zoomSpeed", 0.5)
+    end
 end
 
 function draw()
@@ -166,7 +175,6 @@ function debugUI()
     SetString("savegame.mod.ZoomKey", " ")
     SetBool("savegame.mod.keybindSet", false)
     end
-    debugMouse()
 end
 
     if InputPressed("p") then
@@ -175,11 +183,5 @@ end
     end
 end
 
-function debugMouse()
-    local x, y = UiGetMousePos()
-    UiTranslate(x, y)
-    UiFont("bold.ttf", 24)
-    UiText("Debug Mode")
-end
 
 

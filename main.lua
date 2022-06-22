@@ -10,19 +10,58 @@ debugEnabled = false
 
 function init()
     fov = defaultFov 
-    if defaultFov == 0 then
-        if zoomedFov == 0 then
-           if timeToZoom == 0 then
-            DebugPrint("Teardown Zoom Mod: Please go to the mod options and change the default fov to the one you use or the mod will not work")
-           end 
-        end 
-    end
+    
+    --checks for null values in mod settings and resets them to default
+
+   resetKeys()
+    
+    --errors
+    
+    bindSet = GetBool("savegame.mod.keybindSet")
+    
     if (bindSet == false) then
         DebugPrint("Teardown Zoom Mod: Please go to the mod options and set a keybind or the mod will not work")
     end
+    
+    -- defaultFOV = GetInt("savegame.mod.defaultFOV")
+    -- if defaultFov == 0 then
+    --     if zoomedFov == 0 then
+    --        if timeToZoom == 0 then
+    --         DebugPrint("Teardown Zoom Mod: Please Set up the mod in mod settings or the game might be unplayable!")
+    --        end 
+    --     end 
+    -- end
 end
 
---checks if c is pressed then zooms
+function resetKeys()
+    if (defaultFOV == null or 0) then
+        SetInt("savegame.mod.defaultFOV", 90)
+        DebugPrint("Teardown Zoom Mod: Default Fov reset, this may happen if its your first time using this mod.")
+    end
+
+    zoomedFOV = GetInt("savegame.mod.zoomedFOV")
+
+    if (zoomedFOV == null or 0) then
+        SetInt("savegame.mod.zoomedFOV", 30)
+        DebugPrint("Teardown Zoom Mod: Zoomed Fov reset, this may happen if its your first time using this mod.")
+    end
+
+    zoomSpeed = GetFloat("savegame.mod.zoomSpeed")
+
+    if (zoomSpeed == null or 0) then
+        SetFloat("savegame.mod.zoomSpeed", 0.5)
+        DebugPrint("Teardown Zoom Mod: Zoom Speed reset, this may happen if its your first time using this mod.")
+    end
+
+    if (zoomKey == null or 0 or "" or " ") then
+        SetString("savegame.mod.zoomKey", "c")
+        SetBool("savegame.mod.keybindSet", true)
+        DebugPrint("Teardown Zoom Mod: Zoom Bind reset, this may happen if its your first time using this mod.")
+        DebugPrint("Teardown Zoom Mod: Please Restart the Level.")
+    end
+end
+
+--checks if the zoomKey is pressed then zooms
 function tick(dt)
     if InputPressed(zoomKey) then
         zoomIn()
@@ -55,8 +94,17 @@ function debug()
     if debugEnabled == true then
         UiFont("bold.ttf", 24)
         UiTranslate(0,20)
-        UiText("Debug Menu", true)
-        UiText(fov)
+        DebugWatch("debugEnabled", debugEnabled)
+        DebugWatch("fov", fov)
+        DebugWatch("defaultFov", defaultFov)
+        DebugWatch("zoomedFov", zoomedFov)
+        DebugWatch("timeToZoom", timeToZoom)
+        DebugWatch("zoomedFov", zoomedFov)
+        DebugWatch("zoomKey", zoomKey)
+        
+        --old code idk if ill use it prolly wont
+        --UiText("Debug Menu", true)
+        --UiText(fov)
         if stupid == true then
             UiTranslate(0,20)
             UiText("Ultra FOV Mode Enabled", true)
