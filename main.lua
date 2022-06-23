@@ -3,7 +3,7 @@
 --the fov var is used for storing the camera FOV
 
 function init()
-    debugEnabled = true
+    debugEnabled = GetBool("savegame.mod.DebugModeEnabled")
     prevDefaultFov = GetInt("options.gfx.fov") --gets fov value from settings
     defaultFOV = GetInt("options.gfx.fov") --gets fov value from settings
     zoomedFov = GetInt("savegame.mod.zoomedFOV")
@@ -41,7 +41,7 @@ function resetSettings()
         DebugPrint("Teardown Zoom Mod: Zoomed Fov reset, this may happen if its your first time using this mod.")
     end
 
-    if (timeToZoom == null or timeToZoom == 0) then
+    if (timeToZoom == null) then
         SetFloat("savegame.mod.zoomSpeed", 0.5)
         timeToZoom = GetFloat("savegame.mod.zoomSpeed")
         DebugPrint("Teardown Zoom Mod: Zoom Speed reset, this may happen if its your first time using this mod.")
@@ -88,10 +88,6 @@ end
 
 --draws debug
 function debug()
-    if InputDown("b") and InputDown("u") and InputDown("g") then
-        debugEnabled = true
-        stupid = false
-    end    
     if debugEnabled == true then
         UiFont("bold.ttf", 24)
         UiTranslate(0,20)
