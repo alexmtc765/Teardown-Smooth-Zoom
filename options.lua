@@ -4,18 +4,9 @@ keybindMode = false
 bindText = "badcode"
 
 function init()
-    defaultFOV = GetInt("savegame.mod.defaultFOV")
-    if defaultFOV == null or 0 then
-        SetInt("savegame.mod.defaultFOV", 90)
-    end
+    defaultFOV = GetInt("options.gfx.fov")
     zoomedFOV = GetInt("savegame.mod.zoomedFOV")
-    if zoomedFOV == null or 0 then
-        SetInt("savegame.mod.zoomedFOV", 30)
-    end
     zoomSpeed = GetFloat("savegame.mod.zoomSpeed")
-    if zoomSpeed == null or 0 then
-        SetFloat("savegame.mod.zoomSpeed", 0.5)
-    end
 end
 
 function draw()
@@ -67,14 +58,12 @@ function drawBottomButtons()
 end
 
 function drawSliders()
- 
-    defaultFOV = UiSlider("ui/common/dot.png", "x", defaultFOV, 0, 170)
+    --defaultFOV = UiSlider("ui/common/dot.png", "x", defaultFOV, 0, 120)
     defaultFOV = round(defaultFOV)
-    UiTranslate(-100, 0)
+    UiTranslate(-80, 0)
     UiText(defaultFOV,true)
-
+    UiTranslate(-20, 0)
     UiTranslate(0, 50)
-
     UiTranslate(100, 0)
     zoomedFOV = UiSlider("ui/common/dot.png", "x", zoomedFOV, 0, 170)
     zoomedFOV = round(zoomedFOV) 
