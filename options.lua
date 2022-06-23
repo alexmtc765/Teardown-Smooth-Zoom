@@ -124,6 +124,11 @@ function draw()
             zoomedFov = 30
             zoomSpeed = 0.5
             zoomKey = "C"
+            
+            SetFloat("savegame.mod.zoomSpeed", zoomSpeed)
+            SetString("savegame.mod.ZoomKey", zoomKey)
+            SetInt("savegame.mod.zoomedFOV", zoomedFov)
+            
             if (debug == true) then
                 DebugPrint("Reset Setttings")
             end
