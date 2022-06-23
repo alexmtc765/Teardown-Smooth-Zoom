@@ -2,7 +2,7 @@
 ### Features
 
 - Customizable FOV **(up to 170)**
-- Customizable Zoomed FOV **(can go as low as 0)**
+- Customizable Zoomed FOV **(can go as low as 1)**
 - Customizable Zoom Speed
 
 ### Zooming in
