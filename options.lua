@@ -1,133 +1,16 @@
---this code is terrible I need to fix it
-debugEnabled = false
-keybindMode = false
-bindText = "badcode"
+--replace with save loading
+zoomedFov = 0
+zoomSpeed = 0
+zoomKey = "N"
+changeButtonText = "Change Bind"
+bindMode = false
 
-function init()
-    defaultFOV = GetInt("options.gfx.fov")
-    zoomedFOV = GetInt("savegame.mod.zoomedFOV")
-    zoomSpeed = GetFloat("savegame.mod.zoomSpeed")
+debug = true
+if (debug == true) then
+    DebugWatch("Debug Enabled", true)
 end
 
-function draw()
-    drawMenu()
-    drawKeybindButton()
-    debugUI()
-end
-
-function drawMenu()
-    centerUI()
-    UiFont("bold.ttf", 48)
-    drawBottomButtons()
-    UiTranslate(0,-100)
-    UiTranslate(0,300)
-    drawSliders()
-    UiTranslate(0,-300)
-    UiTranslate(0,345)
-    drawZoomSpeed()
-    UiTranslate(0,-345)
-    drawText() 
-end
-
---draws menu save and default button
-function drawBottomButtons()
-    UiTranslate(0,750)
-    if UiTextButton("Menu") then
-        Menu()
-    end
-
-    UiTranslate(800, 0)
-    if UiTextButton("Default") then
-        defaultFOV = 90
-        zoomedFOV = 30
-        zoomSpeed = 0.5
-        SetInt("savegame.mod.defaultFOV", 90)
-        SetInt("savegame.mod.zoomedFOV", 30)
-        SetFloat("savegame.mod.zoomSpeed", 0.5)
-        SetString("savegame.mod.ZoomKey", "c")
-        SetBool("savegame.mod.keybindSet", true)
-    end
-
-    UiTranslate(-1600, 0)
-    if UiTextButton("Save") then
-        SetInt("savegame.mod.defaultFOV", defaultFOV)
-        SetInt("savegame.mod.zoomedFOV", zoomedFOV)
-        SetFloat("savegame.mod.zoomSpeed", zoomSpeed)
-    end
-    UiTranslate(800, -750) 
-end
-
-function drawSliders()
-    --defaultFOV = UiSlider("ui/common/dot.png", "x", defaultFOV, 0, 120)
-    defaultFOV = round(defaultFOV)
-    UiTranslate(-80, 0)
-    UiText(defaultFOV,true)
-    UiTranslate(-20, 0)
-    UiTranslate(0, 50)
-    UiTranslate(100, 0)
-    zoomedFOV = UiSlider("ui/common/dot.png", "x", zoomedFOV, 0, 170)
-    zoomedFOV = round(zoomedFOV) 
-    UiTranslate(-100, 0)
-    UiText(zoomedFOV,true)
-end
-
-function drawZoomSpeed()
-    zoomSpeed = roundDec(zoomSpeed)
-    if UiTextButton("+0.1") then
-        zoomSpeed = zoomSpeed + 0.1
-    end
-    UiTranslate(100, 0)
-    if UiTextButton("-0.1") then
-        zoomSpeed = zoomSpeed - 0.1 
-        if (zoomSpeed < 0) then
-            zoomSpeed = 0
-        end
-    end
-    UiTranslate(100, 0)
-    UiText(zoomSpeed,true)
-    UiTranslate(-100, 0)
-    UiTranslate(0, -100) 
-    UiTranslate(0, 150)
-end
---draws text inbetween buttons
-function drawText()
-    UiText("Default FOV")
-    UiTranslate(0,100)
-    UiText("Zoomed FOV")
-    UiTranslate(0,100)
-    UiText("Zoom Speed")
-    UiTranslate(0,-200)
-end
-
-function drawKeybindButton()
-    UiTranslate(0,-50)
-    if UiTextButton(bindText) then 
-        keybindMode = true
-    end
-    changeBind()
-    UiTranslate(0,50)
-end
-
-function changeBind()
-    if (keybindMode == true) then
-        bindText = "Press a key"
-        ZoomKey = InputLastPressedKey()
-        SetString("savegame.mod.ZoomKey", ZoomKey)
-        if InputDown(ZoomKey) then
-            --DebugPrint(ZoomKey)
-            keybindMode = false
-            SetBool("savegame.mod.keybindSet", true)
-            end
-    else
-        bindText = "Change Keybind"
-    end
-end
-
-function centerUI()
-    UiTranslate(UiCenter(), 250)
-	UiAlign("center middle")
-end
-
+--functions for rounding
 function roundDec(n)
     return math.floor(n * 100 + 0.5) / 100
 end
@@ -136,41 +19,115 @@ function round(n)
     return math.floor(n + 0.5)
 end
 
+function draw()
+    UiTranslate(UiCenter(), 150)
+	UiAlign("center middle")
 
+	--Title
+	UiFont("bold.ttf", 48)
+	UiText("Zoom Mod Options")
 
---draws debug ui
-function debugUI()
-    if InputDown("b") and InputDown("u") and InputDown("g") then
-        debugEnabled = true
-    end 
-    if debugEnabled == true then
-    UiTranslate(0, -100)
-    local dfov = GetInt("savegame.mod.defaultFOV")
-    UiText(dfov,true)
- 
-    UiTranslate(0, -100)
-    local zfov = GetInt("savegame.mod.zoomedFOV")
-    UiText(zfov,true)
- 
-    UiTranslate(0, -100)
-    local zSpeed = GetFloat("savegame.mod.zoomSpeed")
-    UiText(zSpeed,true)
-    UiTranslate(0, -100)
+    --Draw Logo
+    UiTranslate(0, 80)
+    UiPush()
+        UiScale(0.5)    
+        UiImage("mod-ui/icon.png")  
+    UiPop()
+
+    --Draw Buttons
+    UiTranslate(0, 80)
+    UiFont("regular.ttf", 26)
+
+    --Zoom Speed Buttons and text
+    UiPush()
+        UiText("Change Zoom Speed", true)
+        UiTranslate(0, 20)
+        UiText(zoomSpeed, false)
+        UiTranslate(-60, 0)
+        UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+            if UiTextButton("-0.1") then
+                zoomSpeed = zoomSpeed - 0.1
+            end
+        UiTranslate(120, 0)
+        UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+            if UiTextButton("+0.1") then
+                zoomSpeed = zoomSpeed + 0.1
+            end
+        if (zoomSpeed < 0.1) then
+            zoomSpeed = 0
+        end
+        
+        --save the value
+
+        if (debug == true) then
+            DebugWatch("zoomSpeed", zoomSpeed)
+        end 
+    UiPop()
     
-    if UiTextButton("Bye Bye Mod Settings") then
-    SetInt("savegame.mod.defaultFOV", 0)
-    SetInt("savegame.mod.zoomedFOV", 0)
-    SetFloat("savegame.mod.zoomSpeed", 0)
-    SetString("savegame.mod.ZoomKey", " ")
-    SetBool("savegame.mod.keybindSet", false)
+   
+    --Zoomed Fov Slider and text
+    UiTranslate(0, 90)
+    UiPush()
+        UiText("Change Zoomed Fov", true)
+        UiTranslate(-70, 20)
+        UiText(zoomedFov, false)
+        UiTranslate(40, 0)
+        zoomedFov = UiSlider("ui/common/dot.png", "x", zoomedFov, 0, 120)
+        zoomedFov = round(zoomedFov)
+        
+        if UiSlider then
+            
+            if (debug == true) then
+                DebugWatch("Slider Value", zoomedFov)
+            end
+            --save the value
+        end
+
+    UiPop()
+    
+    
+    --Change Zoom Bind Button
+    UiTranslate(0, 90)
+    UiPush()
+        UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+        if UiTextButton(changeButtonText) then
+            bindMode = true
+        end
+        if (bindMode == true) then
+            changeButtonText = "Press Any Key"
+            zoomKey = InputLastPressedKey()
+            SetString("savegame.mod.ZoomKey", zoomKey)
+            if InputDown(zoomKey) then
+                bindMode = false
+            end
+        else
+            changeButtonText = "Change Bind"
+        end
+        UiTranslate(0,45)
+        bindCurrentText = "Current Bind: " .. zoomKey
+        UiText(bindCurrentText, false)
+        if (debug == true) then
+            DebugWatch("zoomBind", zoomKey)
+        end
+    UiPop()
+    
+    --reset button , if statement used to hide the button
+    UiTranslate(0, 90)
+    if (zoomedFov ~= 30 or zoomSpeed ~= 0.5 or zoomKey ~= "C") then
+        UiPush()
+
+            UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+            if UiTextButton("Reset Settings") then
+                zoomedFov = 30
+                zoomSpeed = 0.5
+                zoomKey = "C"
+                if (debug == true) then
+                    DebugPrint("Reset Setttings")
+                end
+            end
+        
+        UiPop()
     end
 end
-
-    if InputPressed("p") then
-        --very true
-        DebugPrint("This UI code is awful")
-    end
-end
-
 
 
