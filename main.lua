@@ -1,68 +1,68 @@
 --loads stuff
-local defaultFov = GetInt("savegame.mod.defaultFOV")
-local zoomedFov = GetInt("savegame.mod.zoomedFOV")
-fov = 0
-local timeToZoom = GetFloat("savegame.mod.zoomSpeed")
-local zoomKey = GetString("savegame.mod.ZoomKey")
-local bindSet = GetBool("savegame.mod.keybindSet")
-debugEnabled = false
+
 --the fov var is used for storing the camera FOV
 
 function init()
-    fov = defaultFov 
+    debugEnabled = true
+    prevDefaultFov = GetInt("options.gfx.fov") --gets fov value from settings
+    defaultFOV = GetInt("options.gfx.fov") --gets fov value from settings
+    zoomedFov = GetInt("savegame.mod.zoomedFOV")
+    timeToZoom = GetFloat("savegame.mod.zoomSpeed")
+    zoomKey = GetString("savegame.mod.ZoomKey")
+    bindSet = GetBool("savegame.mod.keybindSet")
+    fov = GetInt("options.gfx.fov") --gets fov value from settings
     
     --checks for null values in mod settings and resets them to default
-
-   resetKeys()
-    
+    resetSettings()
     --errors
     
+
     bindSet = GetBool("savegame.mod.keybindSet")
     
     if (bindSet == false) then
         DebugPrint("Teardown Zoom Mod: Please go to the mod options and set a keybind or the mod will not work")
     end
     
-    -- defaultFOV = GetInt("savegame.mod.defaultFOV")
-    -- if defaultFov == 0 then
-    --     if zoomedFov == 0 then
-    --        if timeToZoom == 0 then
-    --         DebugPrint("Teardown Zoom Mod: Please Set up the mod in mod settings or the game might be unplayable!")
-    --        end 
-    --     end 
-    -- end
 end
 
-function resetKeys()
-    if (defaultFOV == null or 0) then
-        SetInt("savegame.mod.defaultFOV", 90)
-        DebugPrint("Teardown Zoom Mod: Default Fov reset, this may happen if its your first time using this mod.")
-    end
+function resetSettings()
 
-    zoomedFOV = GetInt("savegame.mod.zoomedFOV")
+    -- old code should probably remove
+    -- if (defaultFov == null or defaultFov == 0) then
+    --     SetInt("savegame.mod.defaultFOV", defaultFOV)
+    --     defaultFov = GetInt("savegame.mod.defaultFOV")
+    --     fov = defaultFov
+    --     DebugPrint("Teardown Zoom Mod: Default Fov reset, this may happen if its your first time using this mod.")
+    -- end
 
-    if (zoomedFOV == null or 0) then
+    if (zoomedFov == null or zoomedFov == 0) then
         SetInt("savegame.mod.zoomedFOV", 30)
+        zoomedFov = GetInt("savegame.mod.zoomedFOV")
         DebugPrint("Teardown Zoom Mod: Zoomed Fov reset, this may happen if its your first time using this mod.")
     end
 
-    zoomSpeed = GetFloat("savegame.mod.zoomSpeed")
-
-    if (zoomSpeed == null or 0) then
+    if (timeToZoom == null or timeToZoom == 0) then
         SetFloat("savegame.mod.zoomSpeed", 0.5)
+        timeToZoom = GetFloat("savegame.mod.zoomSpeed")
         DebugPrint("Teardown Zoom Mod: Zoom Speed reset, this may happen if its your first time using this mod.")
     end
 
-    if (zoomKey == null or 0 or "" or " ") then
+    if (zoomKey == null or zoomKey == 0 or zoomKey == "" or zoomKey == " ") then
         SetString("savegame.mod.zoomKey", "c")
         SetBool("savegame.mod.keybindSet", true)
+        zoomKey = GetString("savegame.mod.ZoomKey")
         DebugPrint("Teardown Zoom Mod: Zoom Bind reset, this may happen if its your first time using this mod.")
-        DebugPrint("Teardown Zoom Mod: Please Restart the Level.")
     end
+
 end
 
 --checks if the zoomKey is pressed then zooms
 function tick(dt)
+    defaultFov = GetInt("options.gfx.fov") --gets fov value from settings
+    if (defaultFov ~= prevDefaultFov) then
+        fov = defaultFov
+    end
+
     if InputPressed(zoomKey) then
         zoomIn()
     end
@@ -70,6 +70,7 @@ function tick(dt)
     if InputReleased(zoomKey) then
         zoomOut()
     end
+    prevDefaultFov = GetInt("options.gfx.fov") --gets fov value from settings
     SetCameraFov(fov) 
     draw()
 end
@@ -101,6 +102,7 @@ function debug()
         DebugWatch("timeToZoom", timeToZoom)
         DebugWatch("zoomedFov", zoomedFov)
         DebugWatch("zoomKey", zoomKey)
+        DebugWatch("options.gfx.fov", GetInt("options.gfx.fov"))
         
         --old code idk if ill use it prolly wont
         --UiText("Debug Menu", true)
