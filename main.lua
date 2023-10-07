@@ -11,13 +11,14 @@ function init()
     zoomKey = GetString("savegame.mod.ZoomKey")
     bindSet = GetBool("savegame.mod.keybindSet")
     fov = GetInt("options.gfx.fov") --gets fov value from settings
-    
+    togglemode = GetBool("savegame.mod.togglemode")
+    toggle = true
     --checks for null values in mod settings and resets them to default
     resetSettings()
     --errors
     
 
-    bindSet = GetBool("savegame.mod.keybindSet")
+    bindSet = true --an update broke this, it used to check the mod save file, ill prolly fix it in the next decade
     
     if (bindSet == false) then
         DebugPrint("Teardown Zoom Mod: Please go to the mod options and set a keybind or the mod will not work")
@@ -35,13 +36,17 @@ function resetSettings()
     --     DebugPrint("Teardown Zoom Mod: Default Fov reset, this may happen if its your first time using this mod.")
     -- end
 
+    --fix this: time to zoon doesnt check right 
+
     if (zoomedFov == null or zoomedFov == 0) then
         SetInt("savegame.mod.zoomedFOV", 30)
+        SetFloat("savegame.mod.zoomSpeed", 0.5)
         zoomedFov = GetInt("savegame.mod.zoomedFOV")
         DebugPrint("Teardown Zoom Mod: Zoomed Fov reset, this may happen if its your first time using this mod.")
+        DebugPrint("Teardown Zoom Mod: Zoom Speed reset, this may happen if its your first time using this mod.")
     end
 
-    if (timeToZoom == null) then
+    if (timeToZoom == null or timeToZoom == " ") then
         SetFloat("savegame.mod.zoomSpeed", 0.5)
         timeToZoom = GetFloat("savegame.mod.zoomSpeed")
         DebugPrint("Teardown Zoom Mod: Zoom Speed reset, this may happen if its your first time using this mod.")
@@ -63,6 +68,33 @@ function tick(dt)
         fov = defaultFov
     end
 
+    if togglemode == false then
+        zoomInOut()
+    elseif togglemode == true then
+        --DebugPrint("Toggle")
+        toggleZoomInOut()
+    end
+
+    prevDefaultFov = GetInt("options.gfx.fov") --gets fov value from settings
+    SetCameraFov(fov) 
+    draw()
+end
+
+function toggleZoomInOut()
+    if toggle == true then
+        if InputPressed(zoomKey) then
+            zoomIn()
+            toggle = false
+        end
+    elseif toggle == false then
+        if InputPressed(zoomKey) then
+            zoomOut()
+            toggle = true
+        end
+    end
+end
+
+function zoomInOut()
     if InputPressed(zoomKey) then
         zoomIn()
     end
@@ -70,9 +102,6 @@ function tick(dt)
     if InputReleased(zoomKey) then
         zoomOut()
     end
-    prevDefaultFov = GetInt("options.gfx.fov") --gets fov value from settings
-    SetCameraFov(fov) 
-    draw()
 end
 
 function zoomIn()
@@ -99,7 +128,7 @@ function debug()
         DebugWatch("zoomedFov", zoomedFov)
         DebugWatch("zoomKey", zoomKey)
         DebugWatch("options.gfx.fov", GetInt("options.gfx.fov"))
-        
+        DebugWatch("togglemode",togglemode)
         --old code idk if ill use it prolly wont
         --UiText("Debug Menu", true)
         --UiText(fov)

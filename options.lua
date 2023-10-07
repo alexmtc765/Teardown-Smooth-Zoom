@@ -1,8 +1,9 @@
 --functions for rounding
+--rounds decimals
 function roundDec(n)
     return math.floor(n * 100 + 0.5) / 100
 end
-
+--rounds up
 function round(n)
     return math.floor(n + 0.5)
 end
@@ -15,10 +16,14 @@ changeButtonText = "Change Bind"
 bindMode = false
 rotation = 0
 GlobalDebug = GetBool("savegame.mod.DebugModeEnabled")
+togglemode = GetBool("savegame.mod.togglemode")
 
 debug =  GetBool("savegame.mod.DebugModeEnabled")
 
 
+function tick(dt)
+    -- every frame
+end
 
 function draw()
     if (debug == true) then
@@ -77,7 +82,7 @@ function draw()
 
     --Zoom Speed Buttons and text
     UiPush()
-        UiText("Change Zoom Time", true)
+        UiText("Zoom Speed", true)
         UiTranslate(0, 20)
         UiText(zoomSpeed, false)
         UiTranslate(-60, 0)
@@ -101,12 +106,18 @@ function draw()
         if (debug == true) then
             DebugWatch("zoomSpeed", zoomSpeed)
         end
+        UiTranslate(-980,-225)
+        UiAlign(top)
+        --Back Button
+        if UiTextButton("Back") then
+            Menu()
+        end
     UiPop()
 
     --Zoomed Fov Slider and text
     UiTranslate(0, 140)
     UiPush()
-        UiText("Change Zoomed Fov", true)
+        UiText("Zoomed FOV", true)
         UiTranslate(-70, 20)
         UiText(zoomedFov, false)
         UiTranslate(40, 0)
@@ -150,20 +161,36 @@ function draw()
         end
     UiPop()
 
+    --Toggle Button
+    UiPush()
+    UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+    UiTranslate(0, 135)
+    if UiTextButton("Toggle Zoom Mode") then
+        togglemode = not togglemode
+        SetBool("savegame.mod.togglemode", togglemode)
+        --DebugPrint(GetBool("savegame.mod.togglemode"))
+        --DebugPrint(togglemode)
+    end
+    UiTranslate(0, 45)
+    toggleText = "Toggle Zoom: " .. tostring(GetBool("savegame.mod.togglemode"))
+    UiText(toggleText, false)
+    UiPop()
+
     --reset button , if statement used to hide the button
     UiTranslate(0, 530)
-    if (zoomedFov ~= 30 or zoomSpeed ~= 0.5 or zoomKey ~= "C") then
+    if (zoomedFov ~= 30 or zoomSpeed ~= 0.5 or zoomKey ~= "C" or togglemode ~= false) then
         UiPush()
             UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
             if UiTextButton("Reset Settings") then
                 zoomedFov = 30
                 zoomSpeed = 0.5
                 zoomKey = "C"
+                togglemode = false
                 
                 SetFloat("savegame.mod.zoomSpeed", zoomSpeed)
                 SetString("savegame.mod.ZoomKey", zoomKey)
                 SetInt("savegame.mod.zoomedFOV", zoomedFov)
-
+                SetBool("savegame.mod.togglemode", togglemode)
                 if (debug == true) then
                     DebugPrint("Reset Setttings")
                 end
