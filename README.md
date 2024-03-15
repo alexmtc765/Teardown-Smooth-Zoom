@@ -1,8 +1,8 @@
 # Zoom Mod For Teardown
 ### Features
 
-- Customizable Zoomed FOV **(can go as low as 1 and as high as 120)**
-- Customizable Zoom Speed **(can go from instant to 9,223,372,036,854,775,807s)**
+- Customizable Zoomed FOV
+- Customizable Zoom Speed
 
 ### Zooming in
 ![](images/Zoom.gif)
