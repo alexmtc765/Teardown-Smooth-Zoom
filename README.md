@@ -7,6 +7,8 @@ Smooth Zoom is a simple mod that adds smooth zoom to the game Teardown. This mod
 
 This repo holds the W.I.P code for this mod.
 
+[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2596322347)
+
 ### Controls
 
 Press **Z** to zoom in
