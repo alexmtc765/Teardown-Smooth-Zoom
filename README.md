@@ -19,6 +19,7 @@ Use the **Scroll Wheel** to zoom in more
 
 Let go of **Z** to zoom out
 
+
 Keybind's, zoom feel, etc. can be changed in the options menu.
 
 
