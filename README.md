@@ -3,7 +3,9 @@
 
 ### Description
 
-Smooth Zoom is a simple mod that adds smooth zoom to the game Teardown. This mod is sort of like [Zoomify](https://www.curseforge.com/minecraft/mc-mods/zoomify) for Minecraft.
+Smooth Zoom is a simple mod that adds smooth zoom to the game Teardown. 
+
+This mod is sort of like [Zoomify](https://www.curseforge.com/minecraft/mc-mods/zoomify) for Minecraft.
 
 This repo holds the W.I.P code for this mod.
 
