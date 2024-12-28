@@ -1,24 +1,23 @@
-*not updated yet
-# Zoom Mod For Teardown
-### Features
 
-- Customizable Zoomed FOV
-- Customizable Zoom Speed
+# Smooth Zoom For Teardown
 
-### Zooming in
+### Description
+
+Smooth Zoom is a simple mod that adds smooth zoom to the game Teardown. This mod is sort of like [Zoomify](https://www.curseforge.com/minecraft/mc-mods/zoomify) for Minecraft.
+
+This repo holds the W.I.P code for this mod.
+
+### Controls
+
+Press **Z** to zoom in
+Use the **Scroll Wheel** to zoom in more
+Let go of **Z** to zoom out
+
+Keybind's, zoom feel, etc. can be changed in the options menu.
+
+
+### Showcase
+
 ![](images/Zoom.gif)
-
-Press **C** to zoom in
-
-### Redesigned Options
-![](images/options.gif)
-
-- The **Keybind Button** lets you set a custom bind for the zoom
-- The **Zoomed FOV** is the one that's used when zooming in 
-- The **Zoom Speed** is the amount of time it takes to zoom in 
-- The **Reset Settings Button** only appears when settings are changed, it resets them to default
-- The **Toggle Zoom Button** changes the zoom type from holding the button to toggle the zoom (I didn't update the gif)
-
-
 
 

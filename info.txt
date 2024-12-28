@@ -1,6 +1,6 @@
-name = Teardown Zoom Mod
+name = Smooth Zoom
 author = alex_mtc
-description = [noupload] A simple zoom mod. Set a bind in the mod options or it wont work. Set the zoom amount and speed in options.
+description = [noupload] A simple, customizable zoom mod.
 tags=# Gameplay
 
 # If description contains [noupload] the description on Steam workshop will not be overwritten.
