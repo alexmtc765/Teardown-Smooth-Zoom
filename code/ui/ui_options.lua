@@ -1,6 +1,6 @@
 function Opt_Init()
-    bgPaths = {"ui/menu/slideshow/mall1.jpg" ,"ui/menu/slideshow/mall2.jpg","ui/menu/slideshow/caveisland3.jpg","ui/menu/slideshow/caveisland4.jpg"}
-    BgPathIndex = 1
+    bgPaths = {"ui/menu/slideshow/carib1.jpg", "ui/menu/slideshow/carib2.jpg", "ui/menu/slideshow/carib3.jpg", "ui/menu/slideshow/carib4.jpg", "ui/menu/slideshow/carib5.jpg", "ui/menu/slideshow/caveisland1.jpg", "ui/menu/slideshow/caveisland2.jpg", "ui/menu/slideshow/caveisland3.jpg", "ui/menu/slideshow/caveisland4.jpg", "ui/menu/slideshow/cullington1.jpg", "ui/menu/slideshow/cullington2.jpg", "ui/menu/slideshow/factory1.jpg", "ui/menu/slideshow/factory2.jpg", "ui/menu/slideshow/factory3.jpg", "ui/menu/slideshow/factory4.jpg", "ui/menu/slideshow/frustrum1.jpg", "ui/menu/slideshow/frustrum2.jpg", "ui/menu/slideshow/hub1.jpg", "ui/menu/slideshow/hub2.jpg", "ui/menu/slideshow/hub3.jpg", "ui/menu/slideshow/hub4.jpg", "ui/menu/slideshow/lee1.jpg", "ui/menu/slideshow/lee2.jpg", "ui/menu/slideshow/lee3.jpg", "ui/menu/slideshow/lee4.jpg", "ui/menu/slideshow/lua_table.py", "ui/menu/slideshow/mall1.jpg", "ui/menu/slideshow/mall2.jpg", "ui/menu/slideshow/mall3.jpg", "ui/menu/slideshow/mall4.jpg", "ui/menu/slideshow/mansion1.jpg", "ui/menu/slideshow/mansion2.jpg", "ui/menu/slideshow/mansion3.jpg", "ui/menu/slideshow/marina1.jpg", "ui/menu/slideshow/marina2.jpg", "ui/menu/slideshow/marina3.jpg", "ui/menu/slideshow/marina4.jpg", "ui/menu/slideshow/tillaggaryd1.jpg", "ui/menu/slideshow/tillaggaryd2.jpg", "ui/menu/slideshow/tillaggaryd3.jpg"}
+    BgPathIndex = math.random(1,#bgPaths)
     TransitionBgPathIndex = BgPathIndex + 1
     BgScale = 1
     TransitionBgScale = BgScale
@@ -31,6 +31,19 @@ function Opt_DrawOptionsMenu(dt)
             saveConfig()
         end
     end
+end
+
+function Opt_resetBg()
+
+    BgScaleAmt = 0.01
+    BgTransitionOpacity = 0.5
+    BgOpacity = 1.0
+    BgScaleTransitionAmount = 1.1
+
+    TransitionBgScaleAmt = BgScaleAmt
+    TransitionBgTransitionOpacity = BgTransitionOpacity
+    TransitionBgOpacity = BgOpacity
+    TransitionBgScaleTransitionAmount = BgScaleTransitionAmount
 end
 
 function Opt_DrawBG(dt) -- All of this moving bg code is really messy, rework it (maybe put into a different file or try and make it use less global variables) it works perfectly tho!
@@ -97,18 +110,7 @@ function Opt_Bg_Get_Index(curIndex)
     end
 end
 
-function Opt_resetBg()
 
-    BgScaleAmt = 0.01
-    BgTransitionOpacity = 0.5
-    BgOpacity = 1.0
-    BgScaleTransitionAmount = 1.1
-
-    TransitionBgScaleAmt = BgScaleAmt
-    TransitionBgTransitionOpacity = BgTransitionOpacity
-    TransitionBgOpacity = BgOpacity
-    TransitionBgScaleTransitionAmount = BgScaleTransitionAmount
-end
 
 function Opt_Bg(scale, opacity, index)
     UiPush()
