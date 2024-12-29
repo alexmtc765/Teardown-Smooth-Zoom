@@ -3,11 +3,14 @@ function Opt_Init()
     BgPathIndex = 1
     currentBgPath = bgPaths[BgPathIndex]
     bind_state = false
+    zoomInAmount = 0 -- FIX
+    zoomInTimes = 0
 end
 
 function Opt_DrawOptionsMenu()
     UiButtonHoverColor(0.8,0.8,0.8)
     UiTextShadow(0, 0, 0, 0.5, 2.0)
+
     Opt_DrawBG()
     Opt_DrawOptBox()
     Opt_DrawLogo()
@@ -42,16 +45,7 @@ function Opt_DrawOptBox()
 end
 
 function Opt_DrawLogo()
-    UiPush() --  Back Button
-        UiTranslate(-355,43)
-        UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
-        UiFont("regular.ttf", 25)     
-        if UiTextButton("Back") then
-            saveConfig()
-            Menu()
-        end
-    UiPop()
-
+    Opt_BackButton(-355,43)
     UiPush() --Logo and Name
         UiFont("bold.ttf", 64) 
         UiTranslate(-30, 80)
@@ -60,7 +54,7 @@ function Opt_DrawLogo()
             UiScale(0.2)
             UiTranslate(1128,-300)
             --debug toggle
-            if UiImageButton("mod-ui/icon.png") then
+            if UiImageButton("img/ui/icon.png") then
                 debugMode = not debugMode
                 DebugPrint("Debug: " .. tostring(debugMode))
                 SetBool("savegame.mod.DebugModeEnabled", debugMode)
@@ -111,7 +105,7 @@ function Opt_DrawOptions()
             UiDrawValue(gameFOV, "º")
         UiPop()
 
-        UiDrawOptionName("Zoomed In FOV", 200)
+        UiDrawOptionName("Zoomed In FOV", 80)
         UiPush()
             UiDrawValue(zoomFOV, "º")
             zoomFOV = UiAdjustmentSlider(zoomFOV, 10, gameFOV-5)
@@ -143,7 +137,7 @@ function Opt_DrawOptions()
 
         UiDrawOptionName("Zoom Keybind", 200)
         UiPush()
-            UiDrawValue("Current Bind: " .. zoomKey, "")
+            UiDrawValue("Current Bind: " .. zoomKey, "", 20, 5)
             UiPush()
                 UiPush()
                     UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
@@ -176,51 +170,35 @@ function Opt_DrawOptions()
     UiPush()
         UiTranslate(200, 0)
         
-        UiDrawOptionName("Zoom Trigger", 0)
+        UiDrawOptionName("Zoom Mode", 0)
         UiPush()
-            local text 
+            local text
             if toggleMode then
-                text = "Press the zoom button to zoom in.\n          Press again to zoom out."
+                text = "Press " .. tostring(zoomKey) .. " to zoom in -> Press " .. tostring(zoomKey) .. " again to zoom out."
             else   
-                text = "Hold the zoom button to zoom in.\n               Let go to zoom out."
+                text = "Hold " .. tostring(zoomKey) .. " to zoom in -> Let go of " .. tostring(zoomKey) .. " to zoom out."
             end
-            UiDrawValue(text,"")
-            toggleMode = UiDrawToggle(toggleMode, 35, "Toggle", "Hold Down",-50,70)
+            UiDescription("Change the way you zoom in.", 24, 35)
+            toggleMode = UiSwitch(toggleMode, 35, "Toggle", "Hold Down")
+            UiDescription(text, 15, 70)
         UiPop()
 
-        UiDrawOptionName("Allow Adjustable Zoom?", 200)
+        UiDrawOptionName("Adjustable Zoom", 200)
         UiPush()
-            local text 
-            if allowAdjustableZoom then
-                text = "Adjusting zoom while zoomed in IS allowed"
-            else
-                text = "Adjusting zoom while zoomed in is NOT allowed"
-            end
-            UiDrawValue(text, "", 20)
-            allowAdjustableZoom = UiDrawToggle(allowAdjustableZoom, 15)
+            UiDescription("Adjust the zoom with the Scroll Wheel.", 24, 35)
+            allowAdjustableZoom = UiSwitch(allowAdjustableZoom, 35)
         UiPop()
 
-        UiDrawOptionName("Allow While in a Vehicle?", 200)
+        UiDrawOptionName("Zoom While in a Vehicle", 200)
         UiPush()
-            local text 
-            if allowVehicleZoom then
-                text = "Zooming in while in a vehicle IS allowed"
-            else
-                text = "Zooming in while in a vehicle is NOT allowed"
-            end
-            UiDrawValue(text, "", 20)
-            allowVehicleZoom = UiDrawToggle(allowVehicleZoom, 15)
+            UiDescription("Allow zoom while in a vehicle.", 24, 35)
+            allowVehicleZoom = UiSwitch(allowVehicleZoom, 35)
         UiPop()
 
-        UiDrawOptionName("Reset Options", 200)
         UiPush()
-            UiTranslate(0,45)
-            UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
-            UiFont("regular.ttf", 25)     
-            if UiTextButton("Reset") then
-                resetConfig()
-            end
+
         UiPop()
+
         if debugMode then
             UiTranslate(0, 100)
             UiText("Nuke Options")
@@ -236,9 +214,30 @@ function Opt_DrawOptions()
     UiPop()
 end
 
-
 function Opt_debug()
     -- if InputPressed("r") then -- doing this while in the settings menu seems to load you into a chapter select level?
     --     Restart()
     -- end
+end
+
+
+function Opt_BackButton(x,y)
+    UiPush()
+        UiTranslate(x,y)
+        UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+        UiFont("regular.ttf", 25)     
+        if UiTextButton("Back") then
+            saveConfig()
+            Menu()
+        end
+    UiPop()
+end
+
+function Opt_ResetButton(x,y)
+    UiTranslate(x,y)
+    UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+    UiFont("regular.ttf", 25)     
+    if UiTextButton("Reset") then
+        resetConfig()
+    end
 end
