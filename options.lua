@@ -8,6 +8,6 @@ function init()
     Opt_Init()
 end
 
-function draw()
-    Opt_DrawOptionsMenu()
+function draw(dt)
+    Opt_DrawOptionsMenu(dt)
 end

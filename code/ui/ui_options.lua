@@ -1,15 +1,20 @@
 function Opt_Init()
-    bgPaths = {"ui/menu/slideshow/mall1.jpg","ui/menu/slideshow/mall2.jpg","ui/menu/slideshow/caveisland3.jpg","ui/menu/slideshow/caveisland4.jpg"}
+    bgPaths = {"ui/menu/slideshow/mall1.jpg" ,"ui/menu/slideshow/mall2.jpg","ui/menu/slideshow/caveisland3.jpg","ui/menu/slideshow/caveisland4.jpg"}
     BgPathIndex = 1
+    TransitionBgPathIndex = BgPathIndex + 1
+    BgScale = 1
+    TransitionBgScale = BgScale
+    Opt_resetBg()
+
     currentBgPath = bgPaths[BgPathIndex]
     bind_state = false
 end
 
-function Opt_DrawOptionsMenu()
+function Opt_DrawOptionsMenu(dt)
     UiButtonHoverColor(0.8,0.8,0.8)
     UiTextShadow(0, 0, 0, 0.5, 2.0)
 
-    Opt_DrawBG()
+    Opt_DrawBG(dt)
     Opt_DrawOptBox()
     Opt_DrawLogo()
     Opt_Draw_Layout()
@@ -28,11 +33,88 @@ function Opt_DrawOptionsMenu()
     end
 end
 
-function Opt_DrawBG()
+function Opt_DrawBG(dt) -- All of this moving bg code is really messy, rework it (maybe put into a different file or try and make it use less global variables) it works perfectly tho!
     UiPush()
+        --Crop on Ultrawide (works on 21:9 and 16:9 dk about others)
+        tl_x, tl_y, br_x, br_y = UiGetCurrentWindow()
+        UiTranslate(br_x/2-1920/2,0)
+        UiDescription("\n If you are seeing this, the developer of this mod has really messed up this background code.\n Please let them know of this, or don't ig.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n This has happened because the game has failed to load a background (very bad)",50) -- If someone actually sees this then theres a big problem
+        UiClipRect(1920, 1080)
+        UiTranslate(-(br_x/2-1920/2),0)
+
         UiTranslate(UiCenter(), UiMiddle())
         UiAlign("center middle")
-        UiImage(currentBgPath)
+        
+        UiPush() --Transition BG
+            if BgOpacity <= 0 then
+                BgScale = TransitionBgScale
+                BgPathIndex = BgPathIndex + 1
+                BgPathIndex = Opt_Bg_Get_Index(BgPathIndex)
+                TransitionBgPathIndex = BgPathIndex + 1
+                TransitionBgPathIndex  = Opt_Bg_Get_Index(TransitionBgPathIndex)
+                Opt_resetBg()
+                
+            else
+                if BgScale > BgScaleTransitionAmount then
+                    TransitionBgScale = TransitionBgScale + TransitionBgScaleAmt*dt
+                end    
+            end
+
+            Opt_Bg(TransitionBgScale, TransitionBgOpacity, TransitionBgPathIndex)
+
+
+            
+            if debugMode then
+                DebugWatch("TransitionBgScale", TransitionBgScale)
+            end
+        UiPop()
+        
+        UiPush() -- Bg
+            Opt_Bg(BgScale, BgOpacity, BgPathIndex)
+            
+            BgScale = BgScale + BgScaleAmt*dt
+            if BgScale > BgScaleTransitionAmount then
+                BgOpacity = BgOpacity - BgTransitionOpacity*dt
+            end
+
+            if debugMode then
+                DebugWatch("Background Scale", BgScale)
+                DebugWatch("Delta Time", dt)
+                DebugWatch("BgOpacity", BgOpacity)
+                DebugWatch("TransitionBgOpacity", TransitionBgOpacity)
+                DebugWatch("BgPathIndex", BgPathIndex)
+                DebugWatch("TransitionBgPathIndex", TransitionBgPathIndex)
+            end
+        UiPop()
+    UiPop()
+end
+
+function Opt_Bg_Get_Index(curIndex)
+    if curIndex > #bgPaths then
+        return 1
+    else 
+        return curIndex
+    end
+end
+
+function Opt_resetBg()
+
+    BgScaleAmt = 0.01
+    BgTransitionOpacity = 0.5
+    BgOpacity = 1.0
+    BgScaleTransitionAmount = 1.1
+
+    TransitionBgScaleAmt = BgScaleAmt
+    TransitionBgTransitionOpacity = BgTransitionOpacity
+    TransitionBgOpacity = BgOpacity
+    TransitionBgScaleTransitionAmount = BgScaleTransitionAmount
+end
+
+function Opt_Bg(scale, opacity, index)
+    UiPush()
+        UiScale(scale)
+        UiColorFilter(1,1,1,opacity)
+        UiImage(bgPaths[index])
     UiPop()
 end
 
