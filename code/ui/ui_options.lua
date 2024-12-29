@@ -1,6 +1,7 @@
 function Opt_Init()
     bgPaths = {"ui/menu/slideshow/carib1.jpg", "ui/menu/slideshow/carib2.jpg", "ui/menu/slideshow/carib3.jpg", "ui/menu/slideshow/carib4.jpg", "ui/menu/slideshow/carib5.jpg", "ui/menu/slideshow/caveisland1.jpg", "ui/menu/slideshow/caveisland2.jpg", "ui/menu/slideshow/caveisland3.jpg", "ui/menu/slideshow/caveisland4.jpg", "ui/menu/slideshow/cullington1.jpg", "ui/menu/slideshow/cullington2.jpg", "ui/menu/slideshow/factory1.jpg", "ui/menu/slideshow/factory2.jpg", "ui/menu/slideshow/factory3.jpg", "ui/menu/slideshow/factory4.jpg", "ui/menu/slideshow/frustrum1.jpg", "ui/menu/slideshow/frustrum2.jpg", "ui/menu/slideshow/hub1.jpg", "ui/menu/slideshow/hub2.jpg", "ui/menu/slideshow/hub3.jpg", "ui/menu/slideshow/hub4.jpg", "ui/menu/slideshow/lee1.jpg", "ui/menu/slideshow/lee2.jpg", "ui/menu/slideshow/lee3.jpg", "ui/menu/slideshow/lee4.jpg", "ui/menu/slideshow/lua_table.py", "ui/menu/slideshow/mall1.jpg", "ui/menu/slideshow/mall2.jpg", "ui/menu/slideshow/mall3.jpg", "ui/menu/slideshow/mall4.jpg", "ui/menu/slideshow/mansion1.jpg", "ui/menu/slideshow/mansion2.jpg", "ui/menu/slideshow/mansion3.jpg", "ui/menu/slideshow/marina1.jpg", "ui/menu/slideshow/marina2.jpg", "ui/menu/slideshow/marina3.jpg", "ui/menu/slideshow/marina4.jpg", "ui/menu/slideshow/tillaggaryd1.jpg", "ui/menu/slideshow/tillaggaryd2.jpg", "ui/menu/slideshow/tillaggaryd3.jpg"}
-    BgPathIndex = math.random(1,#bgPaths)
+    --BgPathIndex = math.random(1,#bgPaths)
+    BgPathIndex = 1
     TransitionBgPathIndex = BgPathIndex + 1
     BgScale = 1
     TransitionBgScale = BgScale
@@ -14,7 +15,8 @@ function Opt_DrawOptionsMenu(dt)
     UiButtonHoverColor(0.8,0.8,0.8)
     UiTextShadow(0, 0, 0, 0.5, 2.0)
 
-    Opt_DrawBG(dt)
+    --Opt_DrawBG(dt) -- Damn it, the new bg code crashes the game very often, idk why only happens when I use the workshop version
+    emergency_drawbg()
     Opt_DrawOptBox()
     Opt_DrawLogo()
     Opt_Draw_Layout()
@@ -44,6 +46,14 @@ function Opt_resetBg()
     TransitionBgTransitionOpacity = BgTransitionOpacity
     TransitionBgOpacity = BgOpacity
     TransitionBgScaleTransitionAmount = BgScaleTransitionAmount
+end
+
+function emergency_drawbg()
+    UiPush()
+        UiTranslate(UiCenter(), UiMiddle())
+        UiAlign("center middle")
+        Opt_Bg(1, 1, TransitionBgPathIndex)
+    UiPop()
 end
 
 function Opt_DrawBG(dt) -- All of this moving bg code is really messy, rework it (maybe put into a different file or try and make it use less global variables) it works perfectly tho!
