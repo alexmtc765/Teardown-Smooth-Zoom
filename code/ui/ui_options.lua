@@ -195,8 +195,20 @@ function Opt_DrawOptions()
 
                     if bind_state then
                         zoomKey = InputLastPressedKey()
+                        
                         if InputDown(zoomKey) then
                             bind_state = false
+                        end
+                        
+                        local mouseKey = InputPressed("mmb") and "mmb"
+                        if InputDown(mouseKey) then
+                            zoomKey = "mmb"
+                            toggleMode = true
+                            bind_state = false
+                        end
+
+                        if debugMode then
+                            DebugWatch("zoomKey", zoomKey)
                         end
                     end
 
