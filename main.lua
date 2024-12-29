@@ -1,5 +1,5 @@
-#include "mod_utils.lua"
-#include "zoom_utils.lua"
+#include "code/common/common_utils.lua"
+#include "code/zoom/zoom_utils.lua"
 
 function init()
     loadConfig()

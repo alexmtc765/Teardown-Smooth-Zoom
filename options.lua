@@ -1,5 +1,6 @@
-#include "mod_utils.lua"
-#include "ui_utils.lua"
+#include "code/common/common_utils.lua"
+#include "code/ui/ui_utils.lua"
+
 
 function init()
     loadConfig()
