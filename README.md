@@ -26,6 +26,14 @@ Let go of **Z** to zoom out
 
 ## Showcase
 
+#### The Zoom
+
 ![](images/Zoom.gif)
+
+#### Options Menu
+
+<img src="images/Options Menu.png" alt="Options Menu" width="512">
+
+
 
 
