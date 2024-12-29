@@ -1,13 +1,8 @@
-function Opt_Init()
-    bgPaths = {"ui/menu/slideshow/carib1.jpg", "ui/menu/slideshow/carib2.jpg", "ui/menu/slideshow/carib3.jpg", "ui/menu/slideshow/carib4.jpg", "ui/menu/slideshow/carib5.jpg", "ui/menu/slideshow/caveisland1.jpg", "ui/menu/slideshow/caveisland2.jpg", "ui/menu/slideshow/caveisland3.jpg", "ui/menu/slideshow/caveisland4.jpg", "ui/menu/slideshow/cullington1.jpg", "ui/menu/slideshow/cullington2.jpg", "ui/menu/slideshow/factory1.jpg", "ui/menu/slideshow/factory2.jpg", "ui/menu/slideshow/factory3.jpg", "ui/menu/slideshow/factory4.jpg", "ui/menu/slideshow/frustrum1.jpg", "ui/menu/slideshow/frustrum2.jpg", "ui/menu/slideshow/hub1.jpg", "ui/menu/slideshow/hub2.jpg", "ui/menu/slideshow/hub3.jpg", "ui/menu/slideshow/hub4.jpg", "ui/menu/slideshow/lee1.jpg", "ui/menu/slideshow/lee2.jpg", "ui/menu/slideshow/lee3.jpg", "ui/menu/slideshow/lee4.jpg", "ui/menu/slideshow/lua_table.py", "ui/menu/slideshow/mall1.jpg", "ui/menu/slideshow/mall2.jpg", "ui/menu/slideshow/mall3.jpg", "ui/menu/slideshow/mall4.jpg", "ui/menu/slideshow/mansion1.jpg", "ui/menu/slideshow/mansion2.jpg", "ui/menu/slideshow/mansion3.jpg", "ui/menu/slideshow/marina1.jpg", "ui/menu/slideshow/marina2.jpg", "ui/menu/slideshow/marina3.jpg", "ui/menu/slideshow/marina4.jpg", "ui/menu/slideshow/tillaggaryd1.jpg", "ui/menu/slideshow/tillaggaryd2.jpg", "ui/menu/slideshow/tillaggaryd3.jpg"}
-    --BgPathIndex = math.random(1,#bgPaths)
-    BgPathIndex = 1
-    TransitionBgPathIndex = BgPathIndex + 1
-    BgScale = 1
-    TransitionBgScale = BgScale
-    Opt_resetBg()
+#include "ui_bg.lua"
 
-    currentBgPath = bgPaths[BgPathIndex]
+function Opt_Init()
+    bgPaths = {"ui/menu/slideshow/frustrum1.jpg","ui/menu/slideshow/frustrum2.jpg","ui/menu/slideshow/mall1.jpg","ui/menu/slideshow/mall2.jpg", "ui/menu/slideshow/caveisland3.jpg", "ui/menu/slideshow/caveisland4.jpg"} -- To many images will cause the game to crash, dk if its my fault or the game has a bug
+    bg = Shuffle:new(bgPaths)
     bind_state = false
 end
 
@@ -15,8 +10,15 @@ function Opt_DrawOptionsMenu(dt)
     UiButtonHoverColor(0.8,0.8,0.8)
     UiTextShadow(0, 0, 0, 0.5, 2.0)
 
-    --Opt_DrawBG(dt) -- Damn it, the new bg code crashes the game very often, idk why only happens when I use the workshop version
-    emergency_drawbg()
+    UiClipUltrawide()
+    if bg then
+        bg:Logic(dt)
+    else
+        if debugMode then
+            DebugPrint("Could not initialize background")
+        end
+    end
+
     Opt_DrawOptBox()
     Opt_DrawLogo()
     Opt_Draw_Layout()
@@ -35,19 +37,6 @@ function Opt_DrawOptionsMenu(dt)
     end
 end
 
-function Opt_resetBg()
-
-    BgScaleAmt = 0.01
-    BgTransitionOpacity = 0.5
-    BgOpacity = 1.0
-    BgScaleTransitionAmount = 1.1
-
-    TransitionBgScaleAmt = BgScaleAmt
-    TransitionBgTransitionOpacity = BgTransitionOpacity
-    TransitionBgOpacity = BgOpacity
-    TransitionBgScaleTransitionAmount = BgScaleTransitionAmount
-end
-
 function emergency_drawbg()
     UiPush()
         UiTranslate(UiCenter(), UiMiddle())
@@ -56,78 +45,8 @@ function emergency_drawbg()
     UiPop()
 end
 
-function Opt_DrawBG(dt) -- All of this moving bg code is really messy, rework it (maybe put into a different file or try and make it use less global variables) it works perfectly tho!
-    UiPush()
-        --Crop on Ultrawide (works on 21:9 and 16:9 dk about others)
-        tl_x, tl_y, br_x, br_y = UiGetCurrentWindow()
-        UiTranslate(br_x/2-1920/2,0)
-        UiDescription("\n If you are seeing this, the developer of this mod has really messed up this background code.\n Please let them know of this, or don't ig.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n This has happened because the game has failed to load a background (very bad)",50) -- If someone actually sees this then theres a big problem
-        UiClipRect(1920, 1080)
-        UiTranslate(-(br_x/2-1920/2),0)
+function Opt_ZoomBG(dt)
 
-        UiTranslate(UiCenter(), UiMiddle())
-        UiAlign("center middle")
-        
-        UiPush() --Transition BG
-            if BgOpacity <= 0 then
-                BgScale = TransitionBgScale
-                BgPathIndex = BgPathIndex + 1
-                BgPathIndex = Opt_Bg_Get_Index(BgPathIndex)
-                TransitionBgPathIndex = BgPathIndex + 1
-                TransitionBgPathIndex  = Opt_Bg_Get_Index(TransitionBgPathIndex)
-                Opt_resetBg()
-                
-            else
-                if BgScale > BgScaleTransitionAmount then
-                    TransitionBgScale = TransitionBgScale + TransitionBgScaleAmt*dt
-                end    
-            end
-
-            Opt_Bg(TransitionBgScale, TransitionBgOpacity, TransitionBgPathIndex)
-
-
-            
-            if debugMode then
-                DebugWatch("TransitionBgScale", TransitionBgScale)
-            end
-        UiPop()
-        
-        UiPush() -- Bg
-            Opt_Bg(BgScale, BgOpacity, BgPathIndex)
-            
-            BgScale = BgScale + BgScaleAmt*dt
-            if BgScale > BgScaleTransitionAmount then
-                BgOpacity = BgOpacity - BgTransitionOpacity*dt
-            end
-
-            if debugMode then
-                DebugWatch("Background Scale", BgScale)
-                DebugWatch("Delta Time", dt)
-                DebugWatch("BgOpacity", BgOpacity)
-                DebugWatch("TransitionBgOpacity", TransitionBgOpacity)
-                DebugWatch("BgPathIndex", BgPathIndex)
-                DebugWatch("TransitionBgPathIndex", TransitionBgPathIndex)
-            end
-        UiPop()
-    UiPop()
-end
-
-function Opt_Bg_Get_Index(curIndex)
-    if curIndex > #bgPaths then
-        return 1
-    else 
-        return curIndex
-    end
-end
-
-
-
-function Opt_Bg(scale, opacity, index)
-    UiPush()
-        UiScale(scale)
-        UiColorFilter(1,1,1,opacity)
-        UiImage(bgPaths[index])
-    UiPop()
 end
 
 function Opt_DrawOptBox()
