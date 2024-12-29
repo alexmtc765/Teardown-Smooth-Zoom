@@ -59,6 +59,14 @@ function resetConfig()
 end
 
 --Math Functions
+function zoomFactor()
+    zoomFOVrad = deg2rad(zoomFOV)
+    gameFOVrad = deg2rad(gameFOV)
+
+    factor = math.tan(gameFOVrad/2)/math.tan(zoomFOVrad/2)
+    return round(factor,1)
+end
+
 function clamp(val,min,max) --Clamps a Value
     if val > max then
         val = max
@@ -72,6 +80,13 @@ end
 function round(value, decimalPlaces)
     local multiplier = 10^(decimalPlaces or 0)
     return math.floor(value * multiplier + 0.5) / multiplier
+end
+
+function deg2rad(deg)
+    local rad
+    rad = deg * (math.pi / 180)
+
+    return rad
 end
 
 
@@ -105,3 +120,4 @@ function global_debug()
         Menu()
     end
 end
+

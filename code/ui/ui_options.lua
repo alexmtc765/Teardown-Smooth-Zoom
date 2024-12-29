@@ -3,8 +3,6 @@ function Opt_Init()
     BgPathIndex = 1
     currentBgPath = bgPaths[BgPathIndex]
     bind_state = false
-    zoomInAmount = 0 -- FIX
-    zoomInTimes = 0
 end
 
 function Opt_DrawOptionsMenu()
@@ -88,27 +86,57 @@ function Opt_Draw_Layout()
         
         UiColor(0.5, 0.5, 0.5, 0.1)
         UiRect(5, 885)
-    UiPop() 
+    UiPop()
 end
 
 
 function Opt_DrawOptions()
     UiTranslate(0, 220)
     UiFont("regular.ttf", 32)
-
+    UiPush()
+        Opt_ResetButton(355,765)
+    UiPop()
     --left side
     UiPush()
         UiTranslate(-200, 0)
-
-        UiDrawOptionName("Zoomed Out FOV", 0)
+        
+        UiDrawOptionName("Zoom in Amount", 0)
         UiPush()
-            UiDrawValue(gameFOV, "º")
+            local zoomFactor = zoomFactor()
+            UiDescription(zoomFactor .. "x", 24, 35)
+            UiTranslate(0,15) -- UiAdjustmentSlider needs to be reworked
+            UiPush()
+                UiTranslate(0,6) -- Work around for UiAdjustmentSlider
+                local hspace = 115
+
+                UiPush()
+                    UiTranslate(-hspace)
+                    UiColor(62/255, 222/255, 89/255)
+                    UiDescription("More Zoom", 20)
+                UiPop()
+
+                UiPush()
+                    UiTranslate(hspace-5) -- UiAdjustmentSlider is NOT centered 
+                    UiColor(222/255, 73/255, 62/255)
+                    UiDescription("Less Zoom", 20)
+                UiPop()
+            UiPop()
+            zoomFOV = UiAdjustmentSlider(zoomFOV, 10, gameFOV-5)
         UiPop()
 
-        UiDrawOptionName("Zoomed In FOV", 80)
         UiPush()
-            UiDrawValue(zoomFOV, "º")
-            zoomFOV = UiAdjustmentSlider(zoomFOV, 10, gameFOV-5)
+            UiTranslate(0,100)
+            local zoomed_hspace = 80
+            UiPush()
+                UiTranslate(-zoomed_hspace,0)
+                UiDescription("Zoomed Out FOV", 24)
+                UiDrawValue(gameFOV, "º")
+            UiPop()
+            UiPush()
+                UiTranslate(zoomed_hspace,0)
+                UiDescription("Zoomed In FOV", 24)
+                UiDrawValue(zoomFOV, "º")
+            UiPop()
         UiPop()
 
         UiDrawOptionName("Zoom Speed", 200)
@@ -179,7 +207,7 @@ function Opt_DrawOptions()
                 text = "Hold " .. tostring(zoomKey) .. " to zoom in -> Let go of " .. tostring(zoomKey) .. " to zoom out."
             end
             UiDescription("Change the way you zoom in.", 24, 35)
-            toggleMode = UiSwitch(toggleMode, 35, "Toggle", "Hold Down")
+            toggleMode = UiSwitch(toggleMode, 35, "Hold Down", "Toggle")
             UiDescription(text, 15, 70)
         UiPop()
 
