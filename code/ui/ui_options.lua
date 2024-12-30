@@ -75,31 +75,11 @@ function Opt_DrawLogo()
 end
 
 function Opt_Draw_Layout()
-    UiPush()
-        UiTranslate(0, 115)
-        UiColor(0.5, 0.5, 0.5, 0.1)
-        UiRect(800, 5)
-    UiPop()
+    UiLayoutDivider(0, 115, 800, 5)
+    UiLayoutDivider(0,120,5,880)
 
-    UiPush()
-        UiTranslate(0, 120)
-        
-        UiFont("bold.ttf", 42)
-        UiPush()
-            UiTranslate(0, 45)
-            UiPush()
-                UiTranslate(-200, 0)
-                UiText("Zoom Feel")
-            UiPop()
-            UiPush()
-                UiTranslate(200, 0)
-                UiText("Zoom Extras")
-            UiPop()
-        UiPop()
-        
-        UiColor(0.5, 0.5, 0.5, 0.1)
-        UiRect(5, 885)
-    UiPop()
+    local categorys = {"Zoom Feel", "Zoom Extras"}
+    UiLayoutCategoryLabels(0, 165, 800, categorys)
 end
 
 
@@ -111,111 +91,38 @@ function Opt_DrawOptions()
     UiPop()
     --left side
     UiPush()
-        UiTranslate(-200, 0)
+        UiTranslate(-200, 0) --Move to left half
         
-        UiDrawOptionName("Zoom in Amount", 0)
+        --ZoomFOV
+        zoomFOV = UiOption(UiCreateOption("Zoom in Amount",zoomFactor() .. "x", 24, 35, 0,"slider",UiCreateSlider("More Zoom","Less Zoom",115,zoomFOV,gameFOV-5,10,{62/255, 222/255, 89/255},{222/255, 73/255, 62/255})))
+        UiTranslate(0,100)
         UiPush()
-            local zoomFactor = zoomFactor()
-            UiDescription(zoomFactor .. "x", 24, 35)
-            UiTranslate(0,15) -- UiAdjustmentSlider needs to be reworked
-            UiPush()
-                UiTranslate(0,6) -- Work around for UiAdjustmentSlider
-                local hspace = 115
-
-                UiPush()
-                    UiTranslate(-hspace)
-                    UiColor(62/255, 222/255, 89/255)
-                    UiDescription("More Zoom", 20)
-                UiPop()
-
-                UiPush()
-                    UiTranslate(hspace-5) -- UiAdjustmentSlider is NOT centered 
-                    UiColor(222/255, 73/255, 62/255)
-                    UiDescription("Less Zoom", 20)
-                UiPop()
-            UiPop()
-            zoomFOV = UiAdjustmentSlider(zoomFOV, 10, gameFOV-5)
-        UiPop()
-
-        UiPush()
-            UiTranslate(0,100)
             local zoomed_hspace = 80
             UiPush()
-                UiTranslate(-zoomed_hspace,0)
+                UiTranslate(zoomed_hspace,0)
                 UiDescription("Zoomed Out FOV", 24)
                 UiDrawValue(gameFOV, "º")
             UiPop()
             UiPush()
-                UiTranslate(zoomed_hspace,0)
+                UiTranslate(-zoomed_hspace,0)
                 UiDescription("Zoomed In FOV", 24)
                 UiDrawValue(zoomFOV, "º")
             UiPop()
         UiPop()
 
-        UiDrawOptionName("Zoom Speed", 200)
-        UiPush()
-            UiDrawValue(zoomSpeed, "s")
-            UiPush()
-                UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
-                UiTranslate(0,25)
-                UiPush()
-                    UiTranslate(-40, 0)
-                    if UiTextButton("-0.01") then
-                        zoomSpeed = zoomSpeed - 0.01
-                    end
-                UiPop()
+        --Zoom Speed
+        local temp_zoomSpeed = zoomSpeed * 1000 --UiAdjustmentSlider work around
+        temp_zoomSpeed = UiOption(UiCreateOption("Zoom Speed", zoomSpeed .. "s", 24, 35, 100,"slider",UiCreateSlider("Faster Zoom","Slower Zoom",115,temp_zoomSpeed,100,0,{250/255, 183/255, 82/255},{94/255, 199/255, 255/255})))
+        zoomSpeed = temp_zoomSpeed/1000
+        zoomSpeed = round(zoomSpeed,2)
 
-                UiPush()
-                    UiTranslate(40, 0)
-                    if UiTextButton("+0.01") then
-                        zoomSpeed = zoomSpeed + 0.01
-                    end
-                UiPop()
-                zoomSpeed = round(zoomSpeed,2)
-                zoomSpeed = clamp(zoomSpeed,0,2) 
-            UiPop()
-        UiPop()
-
-        UiDrawOptionName("Zoom Keybind", 200)
-        UiPush()
-            UiDrawValue("Current Bind: " .. zoomKey, "", 20, 5)
-            UiPush()
-                UiPush()
-                    UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
-                    UiTranslate(0, 25)
-                    local text 
-                    if not bind_state then
-                        text = "Change"
-                    else
-                        text = "Press Any Key"
-                    end
-                    if UiTextButton(text) then
-                        bind_state = not bind_state
-                    end
-
-                    if bind_state then
-                        zoomKey = InputLastPressedKey()
-                        
-                        if InputDown(zoomKey) then
-                            bind_state = false
-                        end
-                        
-                        local mouseKey = InputPressed("mmb") and "mmb"
-                        if InputDown(mouseKey) then
-                            zoomKey = "mmb"
-                            toggleMode = true
-                            bind_state = false
-                        end
-
-                        if debugMode then
-                            DebugWatch("zoomKey", zoomKey)
-                        end
-                    end
-
-                UiPop()
-            UiPop()
-        UiPop()
+        --Keybind
+        UiOption(UiCreateOption("Zoom Keybind", "Current Bind: " .. zoomKey, 20, 25, 150))
+        UiTranslate(0,50)
+        UiZoomKeybindButton()
     UiPop()
+
+
 
     
 

@@ -62,7 +62,7 @@ function Shuffle:ZoomActiveBackgroundState(dt) -- State 1
 end
 
 function Shuffle:TransitionFromActiveBackgroundState(dt) -- State 2
-    local zoomSpeed = (self.bgZoom - 1) / self.bgHoldTime -- keep same zoom speed while transitioning
+    local zoomSpeed = (self.bgZoom - 1) / self.bgHoldTime -- Kepp zooming in at the same speed during a transition
     self.bg.scale = self.bg.scale + zoomSpeed * dt
     self.time_tr = self:UpdateTime(self.time_tr, dt)
     self.bgTr.opacity = self:lerp(self.time_tr, self.tr_length, 0, 1)
@@ -87,7 +87,7 @@ function Shuffle:scaleBg(time)
     self.bg.scale = self:lerp(time,self.bgHoldTime, 1 ,self.bgZoom)
 end
 
-function Shuffle:lerp(time, tr_time, startValue, endValue)
+function Shuffle:lerp(time, tr_time, startValue, endValue) --This lerp function isn't exactly right, consider switching the the one used in Teardown's files (ui/helpers/math.lua)
     local t = math.min(time/tr_time, 1)
     return startValue + t* (endValue-startValue)
 end
@@ -108,7 +108,9 @@ function Shuffle:Logic(dt)
     elseif self.state == 3 then
         self:ReturnToActiveBackgroudState(dt)
     else
-        DebugWatch("Shuffle State", "Invalid (Developer has messed up this code, let them know)")
+        if debugMode then
+            DebugWatch("Shuffle State", "Invalid") -- This should never happen
+        end
     end
 
     self:DisplayShuffle()
