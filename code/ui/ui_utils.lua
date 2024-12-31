@@ -1,10 +1,11 @@
-function UiAdjustmentSlider(value,min,max) -- This is the only piece of code thats survived since version 1.0
-    --UiTranslate(min)
-    UiRect(max-min,2)
-    UiTranslate(-((max)/2))
-    UiAlign("center middle")
-    value = UiSlider("ui/common/dot.png", "x", value, min, max)
-    value = math.floor(value)
+function UiAdjustmentSlider(value,min,max)
+    UiPush()
+        UiAlign("center middle")
+        UiRect(max-min,2)
+        UiTranslate(-((max)/2))
+        value = UiSlider("ui/common/dot.png", "x", value, min, max)
+        value = math.floor(value)
+    UiPop()
     return value
 end
 
@@ -230,13 +231,12 @@ function UiCreateSwitch(value, vspace, disabled_text, enabled_text) --  UiSwitch
     }
     return switch
 end
---function UiCreateKeybindOption() Eventually make this into something modular
 
 function UiCreateOption(name, description, d_size, d_vspace, vspace, option_type, type_specific)
     local option = {
         name = name,
         description = description,
-        d_size = d_size, -- Gotta find a better name for this ngl
+        d_size = d_size, -- TODO: change this to d_f_size
         d_vspace = d_vspace,
         vspace = vspace,
         option_type =  option_type,
@@ -246,7 +246,18 @@ function UiCreateOption(name, description, d_size, d_vspace, vspace, option_type
     return option
 end
 
-function UiZoomKeybindButton()
+function UiCreateButton(text,position,f_size,action)
+    local button = {
+        text = text,
+        position = position,
+        f_size = f_size,
+        action = action
+    }
+    
+    return button
+end
+
+function UiZoomKeybindButton() -- This needs to be implemented with UiButton and completely re-done
     UiPush()
         UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
         UiTranslate(0, 25)
@@ -261,27 +272,30 @@ function UiZoomKeybindButton()
             bind_state = not bind_state
         end
 
-        if bind_state then
-            zoomKey = InputLastPressedKey()
-            
-            if InputDown(zoomKey) then
-                bind_state = false
-            end
-            
-            local mouseKey = InputPressed("mmb") and "mmb"
-            if InputDown(mouseKey) then
-                zoomKey = "mmb"
-                toggleMode = true
-                bind_state = false
-            end
-
-            if debugMode then
-                DebugWatch("zoomKey", zoomKey)
-            end
-        end
+        changeKeybind()
     UiPop()
 end
 
+function changeKeybind()
+    if bind_state then
+        zoomKey = InputLastPressedKey()
+        
+        if InputDown(zoomKey) then
+            bind_state = false
+        end
+        
+        local mouseKey = InputPressed("mmb") and "mmb"
+        if InputDown(mouseKey) then
+            zoomKey = "mmb"
+            toggleMode = true
+            bind_state = false
+        end
+
+        if debugMode then
+            DebugWatch("zoomKey", zoomKey)
+        end
+    end
+end
 
 function UiSliderOption(slider)
     if slider.left_text_colour == nil then
@@ -323,6 +337,25 @@ function UiSwitchOption(switch)
     return switch.value
 end
 
+function UiButton(button)
+    if button == nil then
+        if debugMode then
+            DebugPrint("UiButton() Error")
+        end
+        return
+    end
+    UiPush()
+        UiTranslate(button.position.x,button.position.y)
+        UiButtonImageBox("ui/common/box-outline-6.png", 6, 6)
+        UiFont("regular.ttf", button.f_size)
+        if UiTextButton(button.text) then
+            button.action()
+            if debugMode then
+                DebugPrint("UiButton() - Pressed: " .. button.text )
+            end
+        end
+    UiPop()
+end
 
 function UiOption(option)
     UiTranslate(0, option.vspace)

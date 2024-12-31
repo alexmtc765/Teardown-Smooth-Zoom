@@ -1,3 +1,6 @@
+-- This is probably the best written part of this mod but it's also way overcomplicated
+-- All this code is used for the shuffled background in the Options menu
+
 function UiDrawBackground(path,scale,opacity)
     UiPush()
         UiTranslate(UiCenter(), UiMiddle())
@@ -62,7 +65,7 @@ function Shuffle:ZoomActiveBackgroundState(dt) -- State 1
 end
 
 function Shuffle:TransitionFromActiveBackgroundState(dt) -- State 2
-    local zoomSpeed = (self.bgZoom - 1) / self.bgHoldTime -- Kepp zooming in at the same speed during a transition
+    local zoomSpeed = (self.bgZoom - 1) / self.bgHoldTime -- Keep zooming in at the same speed during a transition
     self.bg.scale = self.bg.scale + zoomSpeed * dt
     self.time_tr = self:UpdateTime(self.time_tr, dt)
     self.bgTr.opacity = self:lerp(self.time_tr, self.tr_length, 0, 1)
@@ -140,7 +143,6 @@ function Shuffle:NextBgIndex(bg_index, max_index)
         return 1
     end
 end
-
 
 function Shuffle:Debug()
     if debugMode then

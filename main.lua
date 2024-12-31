@@ -1,6 +1,8 @@
 #include "code/common/common_utils.lua"
 #include "code/zoom/zoom_utils.lua"
 
+--TODO: Controller Support (For Steamdeck)
+
 function init()
     loadConfig()
     initZoomVariables()

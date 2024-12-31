@@ -1,9 +1,19 @@
 #include "ui_bg.lua"
 
+--This code is much better then the old menu but its still a mess
+--TODO: Make a whole dynamic Ui system (Like UMF) but make it look like the official TD Ui
+
 function Opt_Init()
     bgPaths = {"ui/menu/slideshow/frustrum1.jpg","ui/menu/slideshow/frustrum2.jpg","ui/menu/slideshow/mall1.jpg","ui/menu/slideshow/mall2.jpg", "ui/menu/slideshow/caveisland3.jpg", "ui/menu/slideshow/caveisland4.jpg"} -- To many images will cause the game to crash, dk if its my fault or the game has a bug
     bg = Shuffle:new(bgPaths)
     bind_state = false
+
+    Button = {
+        back = UiCreateButton("Back",{x=-355, y=43},25,function(self) saveConfig() Menu() end),
+        reset = UiCreateButton("Reset",{x=355, y=765},24,function(self) resetConfig() end),
+        z_keybind = UiCreateButton("Reset",{x=0, y=25},24,function(self) bind_state = not bind_state end)
+    }
+    
 end
 
 function Opt_DrawOptionsMenu(dt)
@@ -29,8 +39,6 @@ function Opt_DrawOptionsMenu(dt)
     end
 
     if debugMode then
-        Opt_debug()
-
         if not nuked then
             saveConfig()
         end
@@ -56,8 +64,9 @@ function Opt_DrawOptBox()
 end
 
 function Opt_DrawLogo()
-    Opt_BackButton(-355,43)
-    UiPush() --Logo and Name
+    UiButton(Button.back)
+
+    UiPush() --Logo and Mod Name
         UiFont("bold.ttf", 64) 
         UiTranslate(-30, 80)
         UiText("Smooth Zoom")
@@ -86,13 +95,10 @@ end
 function Opt_DrawOptions()
     UiTranslate(0, 220)
     UiFont("regular.ttf", 32)
-    UiPush()
-        Opt_ResetButton(355,765)
-    UiPop()
-    --left side
-    UiPush()
+    UiButton(Button.reset)
+
+    UiPush() --left side
         UiTranslate(-200, 0) --Move to left half
-        
         --ZoomFOV
         zoomFOV = UiOption(UiCreateOption("Zoom in Amount",zoomFactor() .. "x", 24, 35, 0,"slider",UiCreateSlider("More Zoom","Less Zoom",115,zoomFOV,gameFOV-5,10,{62/255, 222/255, 89/255},{222/255, 73/255, 62/255})))
         UiTranslate(0,100)
@@ -119,30 +125,35 @@ function Opt_DrawOptions()
         --Keybind
         UiOption(UiCreateOption("Zoom Keybind", "Current Bind: " .. zoomKey, 20, 25, 150))
         UiTranslate(0,50)
-        UiZoomKeybindButton()
+        local bind_text
+        if not bind_state then
+            bind_text = "Change"
+        else
+            bind_text = "Press Any Key"
+        end
+        Button.z_keybind.text = bind_text
+        UiButton(Button.z_keybind)
+        changeKeybind()
     UiPop()
-
-
-
     
-
-    --right side
-    UiPush()
+    UiPush() --right side
         UiTranslate(200, 0)
 
-
         toggleMode = UiOption(UiCreateOption("Zoom Mode","Change the way you zoom in.", 24, 35, 0, "switch", UiCreateSwitch(toggleMode, 35, "Hold Down", "Toggle")))
-        local text
+        local instruct_text
         if toggleMode then
-            text = "Press " .. tostring(zoomKey) .. " to zoom in -> Press " .. tostring(zoomKey) .. " again to zoom out."
+            instruct_text = "Press " .. tostring(zoomKey) .. " to zoom in -> Press " .. tostring(zoomKey) .. " again to zoom out."
         else   
-            text = "Hold " .. tostring(zoomKey) .. " to zoom in -> Let go of " .. tostring(zoomKey) .. " to zoom out."
+            instruct_text = "Hold " .. tostring(zoomKey) .. " to zoom in -> Let go of " .. tostring(zoomKey) .. " to zoom out."
         end
-        UiDescription(text, 15, 70)
 
-        allowAdjustableZoom = UiOption(UiCreateOption("Adjustable Zoom", "Adjust the zoom with the Scroll Wheel.", 24, 35, 100, "switch", UiCreateSwitch(allowAdjustableZoom, 35)))
+        UiPush()
+            UiDescription(instruct_text, 15, 70)
+        UiPop()
 
-        allowVehicleZoom = UiOption(UiCreateOption("Zoom While in a Vehicle", "Allow zoom while in a vehicle.", 24, 35, 110, "switch", UiCreateSwitch(allowVehicleZoom, 35)))
+        allowAdjustableZoom = UiOption(UiCreateOption("Adjustable Zoom", "Adjust the zoom with the Scroll Wheel.", 24, 35, 165 , "switch", UiCreateSwitch(allowAdjustableZoom, 35)))
+
+        allowVehicleZoom = UiOption(UiCreateOption("Zoom While in a Vehicle", "Allow zoom while in a vehicle.", 24, 35, 115, "switch", UiCreateSwitch(allowVehicleZoom, 35)))
 
         if debugMode then
             UiTranslate(0, 100)
@@ -158,13 +169,6 @@ function Opt_DrawOptions()
         end
     UiPop()
 end
-
-function Opt_debug()
-    -- if InputPressed("r") then -- doing this while in the settings menu seems to load you into a chapter select level?
-    --     Restart()
-    -- end
-end
-
 
 function Opt_BackButton(x,y)
     UiPush()
