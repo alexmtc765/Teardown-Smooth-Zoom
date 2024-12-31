@@ -129,35 +129,20 @@ function Opt_DrawOptions()
     --right side
     UiPush()
         UiTranslate(200, 0)
-        
-        UiDrawOptionName("Zoom Mode", 0)
-        UiPush()
-            local text
-            if toggleMode then
-                text = "Press " .. tostring(zoomKey) .. " to zoom in -> Press " .. tostring(zoomKey) .. " again to zoom out."
-            else   
-                text = "Hold " .. tostring(zoomKey) .. " to zoom in -> Let go of " .. tostring(zoomKey) .. " to zoom out."
-            end
-            UiDescription("Change the way you zoom in.", 24, 35)
-            toggleMode = UiSwitch(toggleMode, 35, "Hold Down", "Toggle")
-            UiDescription(text, 15, 70)
-        UiPop()
 
-        UiDrawOptionName("Adjustable Zoom", 200)
-        UiPush()
-            UiDescription("Adjust the zoom with the Scroll Wheel.", 24, 35)
-            allowAdjustableZoom = UiSwitch(allowAdjustableZoom, 35)
-        UiPop()
 
-        UiDrawOptionName("Zoom While in a Vehicle", 200)
-        UiPush()
-            UiDescription("Allow zoom while in a vehicle.", 24, 35)
-            allowVehicleZoom = UiSwitch(allowVehicleZoom, 35)
-        UiPop()
+        toggleMode = UiOption(UiCreateOption("Zoom Mode","Change the way you zoom in.", 24, 35, 0, "switch", UiCreateSwitch(toggleMode, 35, "Hold Down", "Toggle")))
+        local text
+        if toggleMode then
+            text = "Press " .. tostring(zoomKey) .. " to zoom in -> Press " .. tostring(zoomKey) .. " again to zoom out."
+        else   
+            text = "Hold " .. tostring(zoomKey) .. " to zoom in -> Let go of " .. tostring(zoomKey) .. " to zoom out."
+        end
+        UiDescription(text, 15, 70)
 
-        UiPush()
+        allowAdjustableZoom = UiOption(UiCreateOption("Adjustable Zoom", "Adjust the zoom with the Scroll Wheel.", 24, 35, 100, "switch", UiCreateSwitch(allowAdjustableZoom, 35)))
 
-        UiPop()
+        allowVehicleZoom = UiOption(UiCreateOption("Zoom While in a Vehicle", "Allow zoom while in a vehicle.", 24, 35, 110, "switch", UiCreateSwitch(allowVehicleZoom, 35)))
 
         if debugMode then
             UiTranslate(0, 100)

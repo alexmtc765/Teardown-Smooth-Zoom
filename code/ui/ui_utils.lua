@@ -209,6 +209,27 @@ function UiCreateSlider(left_text, right_text, h_space, value, max, min, left_te
     return slider
 end
 
+function UiCreateToggle(value, vspace, positive, negative, left_button_pos, right_button_pos) 
+    local toggle = {
+        value = value,
+        vspace = vspace,
+        positive = positive,
+        negative = negative,
+        left_button_pos = left_button_pos,
+        right_button_pos = right_button_pos
+    }
+    return toggle
+end
+
+function UiCreateSwitch(value, vspace, disabled_text, enabled_text) --  UiSwitch(value, vspace, disabled_text, enabled_text)
+    local switch = {
+        value = value,
+        vspace = vspace,
+        disabled_text = disabled_text,
+        enabled_text = enabled_text
+    }
+    return switch
+end
 --function UiCreateKeybindOption() Eventually make this into something modular
 
 function UiCreateOption(name, description, d_size, d_vspace, vspace, option_type, type_specific)
@@ -291,17 +312,34 @@ function UiSliderOption(slider)
     return slider.value
 end
 
+function UiToggleOption(toggle)
+    toggle.value = UiDrawToggle(toggle.value, toggle.vspace, toggle.positive, toggle.negative, toggle.left_button_pos, toggle.right_button_pos)
+    UiPop()
+    return toggle.value
+end
+
+function UiSwitchOption(switch)
+    switch.value = UiSwitch(switch.value, switch.vspace, switch.disabled_text, switch.enabled_text)
+    return switch.value
+end
 
 
 function UiOption(option)
     UiTranslate(0, option.vspace)
     UiPush()
+
         UiDrawOptionName(option.name, 0)
         UiDescription(option.description, option.d_size, option.d_vspace)
 
         if option.option_type == "slider" then
-            UiTranslate(0,15) -- UiAdjustmentSlider needs to be reworked
+            UiTranslate(0, 15) -- UiAdjustmentSlider needs to be reworked
             return UiSliderOption(option.type_specific)
+        elseif option.option_type == "switch" then
+            --UiTranslate(0, 10)
+            return UiSwitchOption(option.type_specific)
+        elseif option.option_type == "toggle" then
+            return UiToggleOption(option.type_specific)
         end
+
     UiPop()
 end
