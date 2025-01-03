@@ -1,5 +1,6 @@
 -- This is probably the best written part of this mod but it's also way overcomplicated
 -- All this code is used for the shuffled background in the Options menu
+-- TODO UiUnloadImage() <- if you dont do that, the game will crash with too many images
 
 function UiDrawBackground(path,scale,opacity)
     UiPush()

@@ -106,10 +106,14 @@ function UiSwitch(value, vspace, disabled_text, enabled_text)
 end
 
 function UiClipUltrawide() -- Clip UI to 16:9 (tested on 21:9)
-    tl_x, tl_y, br_x, br_y = UiGetCurrentWindow()
-    UiTranslate(br_x/2-1920/2,0)
-    UiClipRect(1920, 1080) 
-    UiTranslate(-(br_x/2-1920/2),0)
+    -- tl_x, tl_y, br_x, br_y = UiGetCurrentWindow()
+    -- UiTranslate(br_x/2-1920/2,0)
+    -- UiClipRect(1920, 1080) 
+    -- UiTranslate(-(br_x/2-1920/2),0)
+    
+    local x0, y0, x1, y1 = UiSafeMargins()
+	UiTranslate(x0, y0)
+	UiWindow(x1-x0, y1-y0, true)
 end
 
 function UiDrawToggle(value, vspacing, positive, negative, left_button_pos, right_button_pos)
