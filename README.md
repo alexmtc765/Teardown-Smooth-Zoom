@@ -26,11 +26,11 @@ Smooth Zoom is a simple lightweight Lua mod for the game Teardown, that adds the
 
 Smooth Zoom currently has these features:
 
-- Adjustable Zoom amount
+- Adjustable zoom amount
 - Adjustable zoom speed
 - Rebindable key binds
 - Zoom mode's (hold or toggle)
-- Scroll zoom
+- Scroll zoom (adjusting zoom with scroll wheel)
 - Allow zooming in while in a vehicle
 - Hides hud while zooming
 - Options menu
@@ -38,7 +38,7 @@ Smooth Zoom currently has these features:
 
 ## Why Make This?
 
-Other block games (Minecraft) have had zoom mods made for them, for example the [Zoomify](https://modrinth.com/mod/zoomify) mod for Minecraft. When I created this mod, Teardown didn't have anything like this so I decided to try and make one.
+Other voxel games (Minecraft) have had zoom mods made for them, for example the [Zoomify](https://modrinth.com/mod/zoomify) mod for Minecraft. When I created this mod, Teardown didn't have anything like this so I decided to try and make one.
 
 ## Showcase
 **Zoom**
