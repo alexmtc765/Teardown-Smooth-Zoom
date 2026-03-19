@@ -1,10 +1,12 @@
 #include "ui_bg.lua"
+#include "code/common/common_utils.lua"
+#include "code/ui/ui_utils.lua"
 
 --This code is much better then the old menu but its still a mess
 --TODO: Make a whole dynamic Ui system (Like UMF) but make it look like the official TD Ui
 
 function Opt_Init()
-    bgPaths = {"ui/menu/slideshow/frustrum1.jpg","ui/menu/slideshow/frustrum2.jpg","ui/menu/slideshow/mall1.jpg","ui/menu/slideshow/mall2.jpg", "ui/menu/slideshow/caveisland3.jpg", "ui/menu/slideshow/caveisland4.jpg"} -- To many images will cause the game to crash, dk if its my fault or the game has a bug
+    bgPaths = {"ui/menu/slideshow/frustrum1.jpg","ui/menu/slideshow/frustrum2.jpg","ui/menu/slideshow/mall1.jpg","ui/menu/slideshow/mall2.jpg", "ui/menu/slideshow/caveisland3.jpg", "ui/menu/slideshow/caveisland4.jpg"} -- To many images will cause the game to crash
     bg = Shuffle:new(bgPaths)
     bind_state = false
 

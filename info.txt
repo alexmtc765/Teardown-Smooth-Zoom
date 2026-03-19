@@ -2,6 +2,7 @@ name = Smooth Zoom
 author = alex_mtc
 description = [noupload] A simple, customizable zoom mod.
 tags=# Gameplay
+version = 2 
 
 # If description contains [noupload] the description on Steam workshop will not be overwritten.
 # Available tags (comma-separated):

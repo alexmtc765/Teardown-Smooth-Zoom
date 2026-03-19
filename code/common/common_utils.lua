@@ -105,10 +105,13 @@ function debugLoadedVariables()
 end
 
 function debugClearConfig()
-    DebugPrint(ListKeys("savegame.mod"))
+    DebugPrint("Attempting to Nuke config.")
+    local mod_save_list = ListKeys("savegame.mod")
+    DebugPrint(mod_save_list)
     ClearKey("savegame.mod")
     DebugPrint("Nuked!")
-    DebugPrint(ListKeys("savegame.mod"))
+    local mod_save_list = ListKeys("savegame.mod")
+    DebugPrint(mod_save_list)
     nuked = true
 end
 
