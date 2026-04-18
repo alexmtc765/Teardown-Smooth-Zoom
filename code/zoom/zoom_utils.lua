@@ -61,16 +61,14 @@ end
 function adjustZoom()
     if zooming then
         if allowAdjustableZoom then
-            SetBool("game.input.locktool", true) -- Why isn't this in the api?
+            SetBool("game.input.locktool", true) 
+        else --Thanks SkyTheNerd for the fix
+            SetBool("game.input.locktool", false)
         end
-
         mouseWheelPosition = -InputValue("mousewheel")
         zoomFOV = clamp(zoomFOV + mouseWheelPosition*10, 10, gameFOV)
     else
         zoomFOV = configZoomFOV
-        if allowAdjustableZoom then
-            SetBool("game.input.locktool", false)
-        end
     end
 end
 
