@@ -35,6 +35,7 @@ Smooth Zoom currently has these features:
 - Hides hud while zooming
 - Options menu
 - In game options menu
+- Multiplayer Support
 
 ## Why Make This?
 
